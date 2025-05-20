@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    refreshTable(global_data);
 }
 
 MainWindow::~MainWindow()
@@ -28,55 +29,32 @@ void MainWindow::on_przyciskWczytaj_clicked()
     delete selectedDirList;
 
     //Tworzenie listy plikóW na podstawie wybranego folderu
-    QStringList filesToRead = {selectedDir.append("/films.csv"), selectedDir.append("/tag_list.csv"), selectedDir.append("/tag_link.csv")};
-    films = readFiles(filesToRead);
-    loadToTable(films);
+    QString fileToRead =selectedDir.append("/films.csv");
+    refreshTable(global_data);
 }
 
-
-QList<Film> MainWindow::readFiles(const QStringList & fileNames){
-    QFile* filmFile = new QFile(fileNames.at(0));
-    QList<Film> filmList;
-
-    if(!filmFile->open(QIODevice::ReadOnly)) { //Sprawdź czy plik był wczytany
-        QMessageBox::information(0, "error", filmFile->errorString());
-    }
-
-    QTextStream filmData(filmFile); //Wczytaj z pliku do wektora obiektów
-    bool firstLine = 1;
-    while(!filmData.atEnd()){
-        if(firstLine){
-            firstLine = 0;
-            continue;
-        }
-        QString line = filmData.readLine();
-        QStringList fields = line.split(",");
-        Film newFilm(fields.at(0).toInt(), fields.at(1), fields.at(2), fields.at(3));
-        filmList.append(newFilm);
-    }
-    QTextStream(stdout) << fileNames.at(0) << " loaded." << Qt::endl;
-    delete filmFile;
-
-    QFile tagList(fileNames.at(1));
-    QFile tagLink(fileNames.at(2));
-    if(!tagList.open(QIODevice::ReadOnly) || !tagLink.open(QIODevice::ReadOnly)) { //Sprawdź czy plik był wczytany
-        QMessageBox::information(0, "error", tagList.errorString());
-    }
-
-
-    return filmList;
-}
-
-void MainWindow::loadToTable(const QList<Film> &list){
+void MainWindow::refreshTable(const Database &account){
+    QList<Film> list = account.getFilms();
     QListWidget* table = this->ui->tabela;
+    table->clear();
 
-    bool firstLine = 1;
     for(const Film &loadedFilm : list){
-        if(firstLine){
-            firstLine = 0;
-            continue;
-        }
         QString displayText = loadedFilm.getName() + " (" + loadedFilm.getYear() + ")" + " Dir. " + loadedFilm.getDirector();
+        if(loadedFilm.tags.length()!=0){
+            displayText.append("   Tags: ");
+        }
+        for(QString tag : loadedFilm.tags){
+            displayText.append(tag + ", ");
+        }
         table->addItem(displayText);
     }
 }
+
+void MainWindow::on_NewFilm_clicked()
+{
+    AddFilm form(this);
+    form.exec();
+    global_data.addFilm(form.getData(global_data.assignId()));
+    this->refreshTable(global_data);
+}
+

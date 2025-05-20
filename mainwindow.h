@@ -3,7 +3,8 @@
 
 #include <QMainWindow>
 #include "film.h"
-
+#include "database.h"
+#include "addfilm.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -22,12 +23,12 @@ public:
 private slots:
     void on_przyciskWczytaj_clicked();
 
-    QList<Film> readFiles(const QStringList & fileNames);
+    void refreshTable(const Database &account);
 
-    void loadToTable(const QList<Film> &list);
+    void on_NewFilm_clicked();
 
 private:
-    QList<Film> films;
+    Database global_data = Database(0);
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

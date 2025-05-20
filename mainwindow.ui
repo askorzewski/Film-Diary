@@ -80,9 +80,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="NewFilm">
        <property name="text">
-        <string>PushButton</string>
+        <string>Nowy</string>
        </property>
       </widget>
      </item>

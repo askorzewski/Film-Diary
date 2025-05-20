@@ -25,6 +25,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         film.h film.cpp
         entry.h entry.cpp
+        database.h database.cpp
+        addfilm.h addfilm.cpp addfilm.ui
+        accountdata.h accountdata.cpp
+        record.h record.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

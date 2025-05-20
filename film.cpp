@@ -22,3 +22,7 @@ QString Film::getDirector() const{
 QString Film::getYear() const{
     return this->year;
 }
+
+void Film::addTag(const QString& tag){
+    this->tags<<tag;
+}
