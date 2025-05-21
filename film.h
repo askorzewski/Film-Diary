@@ -8,7 +8,6 @@
  */
 class Film : public Record
 {
-    int id;
     QString name;
     QString director;
     QString year;
@@ -27,6 +26,11 @@ public:
 
     void addTag(const QString& tag);
 
+    /**
+     * @brief toText
+     * @return Dane obiektu w formie tekstowej do zapisu w pliku
+     */
+    QString toText();
 private:
 
 };

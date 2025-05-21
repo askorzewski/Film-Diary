@@ -1,5 +1,7 @@
 #include "film.h"
 
+Film::Film(){}
+
 Film::Film(int id, QString name, QString director, QString year) {
     this->id = id;
     this->name = name;
@@ -11,9 +13,6 @@ QString Film::getName() const{
     return this->name;
 }
 
-int Film::getId() const{
-    return this->id;
-}
 
 QString Film::getDirector() const{
     return this->director;
@@ -25,4 +24,16 @@ QString Film::getYear() const{
 
 void Film::addTag(const QString& tag){
     this->tags<<tag;
+}
+
+QString Film::toText(){
+    if(tags.empty()) {
+        return QString(QString::number(id) + "," + name + "," + director + ",NULL");
+    }
+    QString output;
+    for(QString tag : tags){
+        output = QString(QString::number(id) + "," + name + "," + director + ",");
+        output.append(tag);
+    }
+    return output;
 }

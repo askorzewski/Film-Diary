@@ -5,6 +5,7 @@
 #include "film.h"
 #include "database.h"
 #include "addfilm.h"
+#include "filmdata.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,12 +24,12 @@ public:
 private slots:
     void on_przyciskWczytaj_clicked();
 
-    void refreshTable(const Database &account);
+    void refreshTable(const FilmData &data);
 
     void on_NewFilm_clicked();
 
 private:
-    Database global_data = Database(0);
+    FilmData global_data = FilmData();
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

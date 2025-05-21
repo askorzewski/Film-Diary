@@ -1,32 +1,56 @@
 #ifndef DATABASE_H
 #define DATABASE_H
-#include "film.h"
-#include "entry.h"
+#include "record.h"
 #include <QStringList>
 #include <QDir>
+#include <QFile>
+
 /**
  * @brief Klasa Database służy do obsługi różnego rodzaju danych
  */
 class Database
 {
-    QList<Record> films;
+protected:
+    QString name;
+
+    /**
+     * @brief usedId - lista użytych już numerów dla danych rekordów w bazie
+     */
+    QList<int> usedId;
+
+    /**
+     * @brief records - rekordy danej bazy
+     */
+    QList<Record*> records;
+    //Potencjalnie zmień na std::vector - poczytaj czego lepiej korzystać
+
+    /**
+     * @brief directory - folder w którym przechowywane są pliki danej bazy
+     */
     QDir directory;
 
 public:
     Database(int id = 0);
     Database(int id, QString path);
 
-    QList<Film> getFilms() const;
+    QList<Record*> getRecords() const;
 
-    void readFilmFile(const QString &fileName);
-    void readEntryFile(const QString &fileName);
+    void writeToFile(QString filename);
 
-    void WritetoFile();
-    void addFilm(const Film &film);
+    /**
+     * @brief addRecord - dodaje nowy record do bazy
+     * @param record - dodawany rekord
+     */
+    void addRecord(Record *record);
+
+    /**
+     * @brief assignId
+     * @return wolny numer wewnątrz bazy
+     */
     int assignId();
-protected:
-    QString name;
-    QList<int> usedId;
+
+private:
+    void moveFiles(const QDir &source, const QDir &target);
 };
 
 #endif // DATABASE_H

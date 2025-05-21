@@ -5,71 +5,51 @@
 #include <QDir>
 
 /**
- * @brief Database::Database - konstruktor, automatycznie szuka bazowe
+ * @brief Database::Database - konstruktor, automatycznie szuka lub tworzy folder o nazwie "Data*id*".
  * @param id
  */
 Database::Database(int id) {
-    QDir directory = this->directory;
+    QDir dir;
     directory.current();
-    if(directory.exists("Data"+QString::number(id))){
-        directory.cd("Data"+QString::number(id));
-        *this = Database(id, directory.path());
+    if(dir.exists("Data"+QString::number(id))){
+        dir.cd("Data"+QString::number(id));
+        this->directory = dir;
         return;
     }
-    if(!directory.mkdir("Data"+QString::number(id))){
+    if(!dir.mkdir("Data"+QString::number(id))){
         QMessageBox::information(0, "error", "Directory could not be created.");
     }
-    directory.cd("Data"+QString::number(id));
-    QFile filmFile = QFile(directory.path()+"/films.csv");
-    QFile entryFile = QFile(directory.path()+"/entries.csv");
-    if(!filmFile.open(QIODevice::NewOnly)) {
-        QMessageBox::information(0, "error", filmFile.errorString());
-    }
-    if(!entryFile.open(QIODevice::NewOnly)) {
-        QMessageBox::information(0, "error", entryFile.errorString());
-    }
+    dir.cd("Data"+QString::number(id));
+    this->directory=dir;
 }
 
+/**
+ * @brief Database::Database Konstruktor służący do importu istniejącego folderu do folderu wewnętrznego i zrobienie z niego bazy
+ * @param id - numer bazy
+ * @param path - ścieżka folderu importowanego
+ */
 Database::Database(int id, QString path){
-    this->readFilmFile(path+"/films.csv");
-    //this->readEntryFile(path+"/entries.csv");
+    QDir target_dir;
+    QDir source_dir(path);
+
+    target_dir.current();
+    if(target_dir.exists("Data"+QString::number(id))){
+        target_dir.cd("Data"+QString::number(id));
+        moveFiles(source_dir, target_dir);
+        this->directory = target_dir;
+        return;
+    }
+    if(!target_dir.mkdir("Data"+QString::number(id))){
+        QMessageBox::information(0, "error", "Directory could not be created.");
+    }
+    target_dir.cd("Data"+QString::number(id));
+    moveFiles(source_dir, target_dir);
+    this->directory=target_dir;
 }
 
 
-void Database::readFilmFile(const QString &fileName){
-    QFile* filmFile = new QFile(fileName);
-    QList<Film> filmList;
-
-    if(!filmFile->open(QIODevice::ReadOnly)) { //Sprawdź czy plik był wczytany
-        QMessageBox::information(0, "error", filmFile->errorString());
-    }
-
-    QTextStream filmData(filmFile); //Wczytaj z pliku do wektora obiektów
-    bool firstLine = 1;
-    while(!filmData.atEnd()){
-        QString line = filmData.readLine();
-        if(firstLine){
-            firstLine = 0;
-            continue;
-        }
-        QStringList fields = line.split(",");
-        int filmId = fields.at(0).toInt();
-        if(!usedId.contains(filmId)){
-            Film newFilm(filmId, fields.at(1), fields.at(2), fields.at(3));
-            usedId.append(filmId);
-            filmList.append(newFilm);
-        }
-        if(fields.at(4)!="NULL"){
-            filmList[filmId].addTag(fields.at(4));
-        }
-    }
-    QTextStream(stdout) << fileName << " loaded." << Qt::endl;
-    delete filmFile;
-    this->films=filmList;
-}
-
-void Database::addFilm(const Film &film){
-    this->films.append(film);
+void Database::addRecord(Record* record){
+    this->records.append(record);
 }
 
 int Database::assignId(){
@@ -78,10 +58,27 @@ int Database::assignId(){
     return newId;
 }
 
-QList<Record> Database::getFilms() const{
-    return this->films;
+QList<Record*> Database::getRecords() const{
+    return this->records;
 }
 
-void saveToFile(){
+void Database::writeToFile(QString filename){
+    QFile file(directory.path() + filename);
+    if(!file.open(QIODevice::WriteOnly)) {
+        QMessageBox::information(0, "error", file.errorString());
+    }
+    QTextStream stream(&file);
 
+    for(Record* record : records){
+        stream<<record->toText();
+    }
+    file.close();
+}
+
+void Database::moveFiles(const QDir &source, const QDir &target){
+    QStringList source_files = source.entryList();
+    for(QString filename : source_files){
+        QFile file = QFile(source.path() + filename);
+        file.copy(target.path() + filename);
+    }
 }
