@@ -3,13 +3,14 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include "FilmData.h"
+#include "addfilm.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    refreshTable(global_data);
+    refreshTable(global_data.getRecords());
 }
 
 MainWindow::~MainWindow()
@@ -31,15 +32,20 @@ void MainWindow::on_przyciskWczytaj_clicked()
 
     //Tworzenie listy plików na podstawie wybranego folderu
     QString fileToRead =selectedDir.append("/films.csv");
-    refreshTable(global_data);
+    refreshTable(global_data.getRecords());
 }
 
-void MainWindow::refreshTable(const FilmData &data){
-    QList<Film*> list = data.getFilms();
+//void MainWindow::refreshTable(const AccountData &data){
+//
+//}
+
+void MainWindow::refreshTable(const QList<Record*> &idList){
     QListWidget* table = this->ui->tabela;
     table->clear();
 
-    for(const Film* loadedFilm : list){ //Ogarnij później wskaćniki żeby zmienić Record na Film
+    for(int i = 0; i<idList.length(); i++){
+        Film* loadedFilm;
+        loadedFilm = dynamic_cast<Film*>(idList[i]);
         QString displayText = loadedFilm->getName() + " (" + loadedFilm->getYear() + ")" + " Dir. " + loadedFilm->getDirector();
         if(loadedFilm->tags.length()!=0){
             displayText.append("   Tags: ");
@@ -51,6 +57,7 @@ void MainWindow::refreshTable(const FilmData &data){
     }
 }
 
+
 void MainWindow::on_NewFilm_clicked()
 {
     AddFilm form(this);
@@ -58,6 +65,12 @@ void MainWindow::on_NewFilm_clicked()
     Film newFilm = Film();
     newFilm = (form.getData(global_data.assignId()));
     global_data.addRecord(&newFilm);
-    this->refreshTable(global_data);
+    this->refreshTable(global_data.getRecords());
+}
+
+
+void MainWindow::on_pushButton_clicked()
+{
+    global_data.writeToFile("/films.csv");
 }
 

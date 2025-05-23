@@ -2,10 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "film.h"
-#include "database.h"
-#include "addfilm.h"
 #include "filmdata.h"
+#include "accountdata.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,9 +22,11 @@ public:
 private slots:
     void on_przyciskWczytaj_clicked();
 
-    void refreshTable(const FilmData &data);
+    void refreshTable(const QList<Record*> &idList);
 
     void on_NewFilm_clicked();
+
+    void on_pushButton_clicked();
 
 private:
     FilmData global_data = FilmData();

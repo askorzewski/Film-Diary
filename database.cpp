@@ -69,8 +69,9 @@ void Database::writeToFile(QString filename){
     }
     QTextStream stream(&file);
 
-    for(Record* record : records){
-        stream<<record->toText();
+    for(int i = 0; i<records.length(); i++){
+        QString recordText = records[i]->toText();
+        stream<<recordText;
     }
     file.close();
 }
