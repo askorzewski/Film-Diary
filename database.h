@@ -63,7 +63,7 @@ public:
     int getId() const;
 
 private:
-    void moveFiles(const QDir &source, const QDir &target);
+    static void moveFiles(const QDir &source, const QDir &target);
 };
 
 #endif // DATABASE_H

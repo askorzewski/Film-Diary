@@ -31,8 +31,19 @@ private slots:
 
     void on_buttonDelete_clicked();
 
+    void on_buttonNew_clicked();
+
+    void on_buttonBox_accepted();
+
+    void on_buttonBox_rejected();
+
+    void on_buttonLoad_clicked();
+
+    void on_NewFilm_clicked();
+
 private:
-    // FilmData global_data = FilmData();
+    FilmData filmData = FilmData();
+
     Ui::MainWindow *ui;
 
     QList<AccountData> accounts;
@@ -40,5 +51,7 @@ private:
     QDir dir = QDir::current();
 
     QString accountSelected = " ";
+
+    AccountData* data;
 };
 #endif // MAINWINDOW_H

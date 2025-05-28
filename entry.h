@@ -1,6 +1,7 @@
 #ifndef ENTRY_H
 #define ENTRY_H
 #include "film.h"
+#include <QDate>
 
 /**
  * @brief Klasa Entry - wpis na temat danego filmu
@@ -13,6 +14,7 @@ class Entry : public Record
 
     QString text_rating;
 
+    QDate date;
 public:
     Entry();
 };

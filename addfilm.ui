@@ -6,36 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>382</width>
-    <height>281</height>
+    <width>400</width>
+    <height>150</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Dodaj Film</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>230</y>
-     <width>301</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Orientation::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
-   </property>
-  </widget>
   <widget class="QWidget" name="formLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>50</y>
+     <x>40</x>
+     <y>10</y>
      <width>321</width>
-     <height>151</height>
+     <height>171</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -76,6 +60,16 @@
      <widget class="QLabel" name="label_4">
       <property name="text">
        <string>Tagi:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+      <property name="standardButtons">
+       <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
       </property>
      </widget>
     </item>

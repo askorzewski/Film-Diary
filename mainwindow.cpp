@@ -1,10 +1,12 @@
 //#include <iostream>
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "./ui_MainWindow.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include "FilmData.h"
 #include "addfilm.h"
+
+//1366x718
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -38,24 +40,26 @@ void MainWindow::loadAccountData(){
     delete accountFile;
 }
 
-\
+
 void MainWindow::deleteAccount(QString &name){
     QList<AccountData>::Iterator account = accounts.begin();
     while(account != accounts.end()){
         if(name == account->getName()){
             accounts.erase(account);
+            break;
         }
+        account++;
     }
 
     QString strId = QString::number(account->getId());
     QFile accountFile = QFile(dir.path() + "/Data/accounts.csv");
-    QFile temp_file = QFile(QDir::tempPath() + "accounts.csv");
+    QFile temp_file = QFile(dir.path() + "/Data/temp_accounts.csv");
 
     if(!accountFile.open(QIODevice::ReadOnly)) {
         QMessageBox::information(0, "error", accountFile.errorString());
     }
     if(!temp_file.open(QIODevice::WriteOnly)) {
-        QMessageBox::information(0, "error", accountFile.errorString());
+        QMessageBox::information(0, "error", temp_file.errorString());
     }
 
     QTextStream data(&accountFile);
@@ -67,17 +71,26 @@ void MainWindow::deleteAccount(QString &name){
         }
         else{
             out<<line;
+            out<<Qt::endl;
         }
     }
     if(!accountFile.remove()){
+        QMessageBox::information(0, "error", accountFile.errorString());
     }
-    if(!temp_file.rename(dir.path() + accountFile.fileName())){
+    if(!temp_file.rename("Data/accounts.csv")){
+        QMessageBox::information(0, "error", temp_file.errorString());
     }
 
-    delete account;
 }
 
 void MainWindow::reloadUi(){
+    QList<QPushButton*> existingButtons = ui->verticalLayoutWidget->findChildren<QPushButton*>(NULL);
+    for(QPushButton* button : existingButtons){
+        button->disconnect();
+        button->setVisible(false);
+        button->deleteLater();
+        button->close();
+    }
     for(AccountData account : accounts){
         QPushButton* button = new QPushButton(account.getName());
         ui->verticalLayout->addWidget(button, 40);
@@ -89,6 +102,7 @@ void MainWindow::reloadUi(){
         QObject::connect (button,SIGNAL(clicked(bool)),this,SLOT(chooseAccount()));
     }
 }
+
 
 void MainWindow::chooseAccount(){
     if(accountSelected!=" "){
@@ -141,28 +155,73 @@ void MainWindow::chooseAccount(){
 // }
 
 
-// void MainWindow::on_NewFilm_clicked()
-// {
-//     AddFilm form(this);
-//     form.exec();
-//     Film newFilm = Film();
-//     newFilm = (form.getData(global_data.freeId()));
-//     for(QString tag : form.getTags()){
-//         newFilm.addTag(tag);
-//     }
-//     global_data.addRecord(&newFilm);
-//     this->refreshTable(global_data.getRecords());
-// }
-
-
-// void MainWindow::on_pushButton_clicked()
-// {
-//     global_data.writeToFile("/films.csv");
-// }
+void MainWindow::on_NewFilm_clicked()
+{
+    AddFilm form(this);
+    form.exec();
+    Film newFilm = Film();
+    newFilm = (form.getData(filmData.freeId()));
+    for(QString tag : form.getTags()){
+        newFilm.addTag(tag);
+    }
+    filmData.addRecord(&newFilm);
+    //this->refreshTable(filmData.getRecords());
+}
 
 
 void MainWindow::on_buttonDelete_clicked()
 {
-
+    if(accountSelected == " "){
+        return;
+    }
+    deleteAccount(accountSelected);
+    reloadUi();
 }
+
+
+
+void MainWindow::on_buttonNew_clicked()
+{
+    ui->addNazwa->setFixedSize(300,100);
+}
+
+
+
+
+void MainWindow::on_buttonBox_accepted()
+{
+    int freeId = accounts.last().getId()+1;
+    QLineEdit* name_container = ui->addNazwa->findChild<QLineEdit*>(NULL);
+    QString name = name_container->text();
+
+    AccountData newAccount(freeId);
+    newAccount.setName(name);
+    accounts.append(newAccount);
+    ui->addNazwa->setFixedSize(0,0);
+
+    QFile accountFile = QFile("Data/accounts.csv");
+    if(!accountFile.rename("Data/accounts.csv")){
+        QMessageBox::information(0, "error", accountFile.errorString());
+    }
+    reloadUi();
+}
+
+
+void MainWindow::on_buttonBox_rejected()
+{
+    ui->addNazwa->setFixedSize(0,0);
+}
+
+
+void MainWindow::on_buttonLoad_clicked()
+{
+    if(accountSelected == " "){
+        return;
+    }
+    ui->startScreen->setFixedSize(0,0);
+    ui->mainScreen->setFixedSize(1366,718);
+}
+
+
+
 
