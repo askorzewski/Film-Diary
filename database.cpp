@@ -9,18 +9,22 @@
  * @param id
  */
 Database::Database(int id) {
+    this->id = id;
     QDir dir;
+    usedId = {0};
     directory.current();
-    if(dir.exists("Data"+QString::number(id))){
-        dir.cd("Data"+QString::number(id));
+    if(dir.exists("Data/Data"+QString::number(id))){
+        dir.cd("Data/Data"+QString::number(id));
         this->directory = dir;
         return;
     }
-    if(!dir.mkdir("Data"+QString::number(id))){
+    if(!dir.mkdir("Data/Data"+QString::number(id))){
         QMessageBox::information(0, "error", "Directory could not be created.");
     }
-    dir.cd("Data"+QString::number(id));
+    dir.cd("Data/Data"+QString::number(id));
     this->directory=dir;
+
+    this->fileList = directory.entryList();
 }
 
 /**
@@ -29,6 +33,8 @@ Database::Database(int id) {
  * @param path - ścieżka folderu importowanego
  */
 Database::Database(int id, QString path){
+    this->id = id;
+    usedId = {0};
     QDir target_dir;
     QDir source_dir(path);
 
@@ -45,6 +51,12 @@ Database::Database(int id, QString path){
     target_dir.cd("Data"+QString::number(id));
     moveFiles(source_dir, target_dir);
     this->directory=target_dir;
+
+    this->fileList = directory.entryList();
+}
+
+Database::~Database(){
+
 }
 
 
@@ -52,7 +64,7 @@ void Database::addRecord(Record* record){
     this->records.append(record);
 }
 
-int Database::assignId(){
+int Database::freeId(){
     int newId = *(usedId.end()-1)+1;
     usedId.append(newId);
     return newId;
@@ -69,8 +81,8 @@ void Database::writeToFile(QString filename){
     }
     QTextStream stream(&file);
 
-    for(int i = 0; i<records.length(); i++){
-        QString recordText = records[i]->toText();
+    for(int id : usedId){
+       QString recordText = records[id]->toText();
         stream<<recordText;
     }
     file.close();
@@ -83,3 +95,16 @@ void Database::moveFiles(const QDir &source, const QDir &target){
         file.copy(target.path() + filename);
     }
 }
+
+QString Database::getDir() const{
+    return directory.absolutePath();
+}
+
+void Database::setName(QString &name){
+    this->name = name;
+}
+
+int Database::getId() const{
+    return this->id;
+}
+

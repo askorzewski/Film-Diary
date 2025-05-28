@@ -20,6 +20,8 @@ public:
 
     Film getData(int id) const;
 
+    QStringList getTags() const;
+
 private slots:
     void on_buttonBox_accepted();
 
@@ -29,6 +31,7 @@ private:
     QString name;
     QString director;
     QString year;
+    QStringList tags;
 };
 
 #endif // ADDFILM_H

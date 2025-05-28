@@ -10,7 +10,10 @@
  */
 class Database
 {
+
 protected:
+    int id;
+
     QString name;
 
     /**
@@ -29,11 +32,17 @@ protected:
      */
     QDir directory;
 
+    QStringList fileList;
+
 public:
     Database(int id = 0);
     Database(int id, QString path);
+    ~Database();
+
 
     QList<Record*> getRecords() const;
+
+    QString getDir() const;
 
     void writeToFile(QString filename);
 
@@ -44,10 +53,14 @@ public:
     void addRecord(Record *record);
 
     /**
-     * @brief assignId
+     * @brief freeId zwraca następny wolny numer id w bazie
      * @return wolny numer wewnątrz bazy
      */
-    int assignId();
+    int freeId();
+
+    void setName(QString &name);
+
+    int getId() const;
 
 private:
     void moveFiles(const QDir &source, const QDir &target);

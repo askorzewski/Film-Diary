@@ -20,16 +20,25 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_przyciskWczytaj_clicked();
 
-    void refreshTable(const QList<Record*> &idList);
+    void loadAccountData();
 
-    void on_NewFilm_clicked();
+    void deleteAccount(QString &name);
 
-    void on_pushButton_clicked();
+    void reloadUi();
+
+    void chooseAccount();
+
+    void on_buttonDelete_clicked();
 
 private:
-    FilmData global_data = FilmData();
+    // FilmData global_data = FilmData();
     Ui::MainWindow *ui;
+
+    QList<AccountData> accounts;
+
+    QDir dir = QDir::current();
+
+    QString accountSelected = " ";
 };
 #endif // MAINWINDOW_H

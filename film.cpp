@@ -1,6 +1,8 @@
 #include "film.h"
 
-Film::Film(){}
+Film::Film(){
+
+}
 
 Film::Film(int id, QString name, QString director, QString year) {
     this->id = id;

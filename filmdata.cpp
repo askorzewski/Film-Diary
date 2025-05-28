@@ -3,7 +3,9 @@
 
 FilmData::FilmData() {
     readFilmFile(directory.path() + "/films.csv");
+
 }
+
 
 void FilmData::readFilmFile(const QString &fileName){
     QFile* filmFile = new QFile(fileName);
@@ -13,13 +15,13 @@ void FilmData::readFilmFile(const QString &fileName){
     }
 
     QTextStream filmData(filmFile); //Wczytaj z pliku do wektora obiektów
-    bool firstLine = 1;
+    //bool firstLine = 1;
     while(!filmData.atEnd()){
         QString line = filmData.readLine();
-        if(firstLine){
-            firstLine = 0;
-            continue;
-        }
+        // if(firstLine){
+        //     firstLine = 0;
+        //     continue;
+        // }
         QStringList fields = line.split(",");
         int filmId = fields.at(0).toInt();
         if(!usedId.contains(filmId)){
@@ -32,7 +34,7 @@ void FilmData::readFilmFile(const QString &fileName){
             filmList[filmId]->addTag(fields.at(4));
         }
     }
-    QTextStream(stdout) << fileName << " loaded." << Qt::endl;
+    //QTextStream(stdout) << fileName << " loaded." << Qt::endl;
     delete filmFile;
 }
 

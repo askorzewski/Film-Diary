@@ -6,8 +6,11 @@
  */
 class AccountData : public Database
 {
+    QList<Record*> watchlist;
 public:
     AccountData(int id);
+
+    QString getName() const;
 };
 
 #endif // ACCOUNTDATA_H
