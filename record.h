@@ -8,14 +8,16 @@
 class Record
 {
 public:
-    Record();
+    Record(int id);
 
     QString virtual toText() = 0;
 
+    QString virtual getLabel() = 0;
+
+    int getId() const;
+
 protected:
     int id;
-
-    int getId();
 };
 
 #endif // RECORD_H

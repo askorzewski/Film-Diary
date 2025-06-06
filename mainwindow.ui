@@ -62,8 +62,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>0</width>
-      <height>0</height>
+      <width>1366</width>
+      <height>718</height>
      </rect>
     </property>
     <widget class="QWidget" name="verticalLayoutWidget_2">
@@ -75,7 +75,7 @@
        <height>551</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout" name="utilityLayout">
+     <layout class="QVBoxLayout" name="utilityStart">
       <item>
        <widget class="QPushButton" name="buttonLoad">
         <property name="sizePolicy">
@@ -230,7 +230,7 @@
       <rect>
        <x>50</x>
        <y>20</y>
-       <width>541</width>
+       <width>281</width>
        <height>120</height>
       </rect>
      </property>
@@ -241,7 +241,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Wybierz konto:</string>
+      <string>Witaj :3</string>
      </property>
     </widget>
     <widget class="QWidget" name="verticalLayoutWidget">
@@ -268,7 +268,7 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>1366</width>
+      <width>0</width>
       <height>718</height>
      </rect>
     </property>
@@ -312,68 +312,16 @@
          <height>499</height>
         </rect>
        </property>
-       <widget class="QWidget" name="verticalLayoutWidget_3">
+       <widget class="QWidget" name="gridLayoutWidget">
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-1</y>
-          <width>1099</width>
-          <height>77</height>
+          <y>0</y>
+          <width>1321</width>
+          <height>501</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <item>
-          <widget class="QWidget" name="labels" native="true">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <property name="spacing">
-             <number>300</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="label_2">
-              <property name="font">
-               <font>
-                <family>Bahnschrift</family>
-                <pointsize>32</pointsize>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Tytuł</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_3">
-              <property name="font">
-               <font>
-                <family>Bahnschrift</family>
-                <pointsize>32</pointsize>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Reżyser</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_4">
-              <property name="font">
-               <font>
-                <family>Bahnschrift</family>
-                <pointsize>32</pointsize>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Tagi</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
+        <layout class="QGridLayout" name="watchlistTable"/>
        </widget>
       </widget>
      </widget>
@@ -391,21 +339,21 @@
         <number>100</number>
        </property>
        <item>
-        <widget class="QPushButton" name="NewFilm">
+        <widget class="QPushButton" name="main_new">
          <property name="text">
           <string>Nowy</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="main_delete">
          <property name="text">
           <string>Usuń</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="main_edit">
          <property name="text">
           <string>Edytuj</string>
          </property>
@@ -437,7 +385,9 @@
     <property name="title">
      <string>Opcje</string>
     </property>
+    <addaction name="actionZapisz"/>
     <addaction name="actionImportuj_z_pliku"/>
+    <addaction name="actionWyloguj"/>
    </widget>
    <addaction name="menuOpcje"/>
   </widget>
@@ -448,6 +398,22 @@
    </property>
    <property name="text">
     <string>Importuj z pliku</string>
+   </property>
+  </action>
+  <action name="actionWyloguj">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentRevert"/>
+   </property>
+   <property name="text">
+    <string>Wyloguj</string>
+   </property>
+  </action>
+  <action name="actionZapisz">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentSave"/>
+   </property>
+   <property name="text">
+    <string>Zapisz</string>
    </property>
   </action>
  </widget>
@@ -464,8 +430,8 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>9</x>
-     <y>34</y>
+     <x>11</x>
+     <y>384</y>
     </hint>
    </hints>
   </connection>

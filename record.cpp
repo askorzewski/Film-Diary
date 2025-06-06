@@ -1,7 +1,9 @@
 #include "record.h"
 
-Record::Record() {}
+Record::Record(int id) : id(id) {
+}
 
-int Record::getId(){
+int Record::getId() const{
     return this->id;
 }
+

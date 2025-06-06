@@ -11,7 +11,6 @@
 Database::Database(int id) {
     this->id = id;
     QDir dir;
-    usedId = {0};
     directory.current();
     if(dir.exists("Data/Data"+QString::number(id))){
         dir.cd("Data/Data"+QString::number(id));
@@ -19,7 +18,7 @@ Database::Database(int id) {
         return;
     }
     if(!dir.mkdir("Data/Data"+QString::number(id))){
-        QMessageBox::information(0, "error", "Directory could not be created.");
+        QMessageBox::information(0, "error", "Folder" + dir.absolutePath() + "nie mógł zostać stworzony.");
     }
     dir.cd("Data/Data"+QString::number(id));
     this->directory=dir;
@@ -34,7 +33,6 @@ Database::Database(int id) {
  */
 Database::Database(int id, QString path){
     this->id = id;
-    usedId = {0};
     QDir target_dir;
     QDir source_dir(path);
 
@@ -46,7 +44,7 @@ Database::Database(int id, QString path){
         return;
     }
     if(!target_dir.mkdir("Data"+QString::number(id))){
-        QMessageBox::information(0, "error", "Directory could not be created.");
+        QMessageBox::information(0, "error", "Folder" + target_dir.absolutePath() + "nie mógł zostać stworzony.");
     }
     target_dir.cd("Data"+QString::number(id));
     moveFiles(source_dir, target_dir);
@@ -60,33 +58,51 @@ Database::~Database(){
 }
 
 
-void Database::addRecord(Record* record){
-    this->records.append(record);
+void Database::addRecord(Record* &record){
+
+    if(!usedId.contains(record->getId())){
+        usedId.append(record->getId());
+    }
+    records.emplaceBack(record);
+
 }
 
 int Database::freeId(){
-    int newId = *(usedId.end()-1)+1;
+    int newId = usedId.last()+1;
     usedId.append(newId);
     return newId;
 }
 
-QList<Record*> Database::getRecords() const{
+//Dla typów listy recordów możesz potem uzyc enuma
+QList<Record*> Database::getRecords(int recordType) const{
     return this->records;
 }
 
-void Database::writeToFile(QString filename){
-    QFile file(directory.path() + filename);
+void Database::writeToFile(QString filename, const QList<Record*> &recordList){
+    QFile file(directory.path() + "/" +filename);
     if(!file.open(QIODevice::WriteOnly)) {
-        QMessageBox::information(0, "error", file.errorString());
+        QMessageBox::information(0, "error", filename + " - zapis" + file.errorString());
     }
     QTextStream stream(&file);
 
     for(int id : usedId){
-       QString recordText = records[id]->toText();
-        stream<<recordText;
+        if(id == 0){
+            continue;
+        }
+        Record* record = findRecord(id);
+        if(record!=nullptr){
+            QString recordText = record->toText();
+            stream<<recordText;
+        }
+        stream<<Qt::endl;
     }
     file.close();
 }
+
+void Database::writeToFile(QString filename){
+    writeToFile(filename, records);
+}
+
 
 void Database::moveFiles(const QDir &source, const QDir &target){
     QStringList source_files = source.entryList();
@@ -107,4 +123,32 @@ void Database::setName(QString &name){
 int Database::getId() const{
     return this->id;
 }
+
+Record* Database::findRecord(int id){
+    QListIterator<Record*> it(records);
+    while(it.hasNext()){
+        Record* rec = it.next();
+        if(id == rec->getId())
+            return rec;
+    }
+    return nullptr;
+}
+
+void Database::saveToFiles(){}
+
+bool Database::clear(){
+    QStringList files = directory.entryList();
+    for(QString file : files){
+        if(!directory.remove(file)){
+            QMessageBox::information(0, "error", "Nie udało się usunąć pliku z folderu.");
+            return 1;
+        };
+    }
+    if(!QDir::current().rmdir(directory.path())){
+        QMessageBox::information(0, "error", "Nie udało się usunąć folderu.");
+        return 1;
+    }
+    return 0;
+}
+
 

@@ -17,7 +17,11 @@ class AddFilm : public QDialog
 public:
     explicit AddFilm(QWidget *parent = nullptr);
     ~AddFilm();
-
+    /**
+     * @brief getData
+     * @param id - nadane ID
+     * @return Objekt Film na podstawie wprowadzonych w formularzu danych.
+     */
     Film getData(int id) const;
 
     QStringList getTags() const;

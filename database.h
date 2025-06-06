@@ -19,38 +19,52 @@ protected:
     /**
      * @brief usedId - lista użytych już numerów dla danych rekordów w bazie
      */
-    QList<int> usedId;
+    QVector<int> usedId = {0};
 
     /**
      * @brief records - rekordy danej bazy
      */
     QList<Record*> records;
-    //Potencjalnie zmień na std::vector - poczytaj czego lepiej korzystać
+
 
     /**
      * @brief directory - folder w którym przechowywane są pliki danej bazy
      */
     QDir directory;
 
+    /**
+     * @brief fileList - lista plików wewnątrz folderu bazy danych
+     */
     QStringList fileList;
 
 public:
     Database(int id = 0);
+    /**
+     * @brief Database - konstruktor który importuje bazę z zewnątrz programu
+     * @param id - id bazy danych
+     * @param path - ścieżka do zawnętrznej bazy
+     */
     Database(int id, QString path);
     ~Database();
 
+    /**
+     * @brief getRecords
+     * @return Lista wskaźników na rekordy bazqy
+     */
+    QList<Record*> getRecords(int recordType = 0) const;
 
-    QList<Record*> getRecords() const;
-
+    /**
+     * @brief getDir
+     * @return Ścieżka folderu bazy danych
+     */
     QString getDir() const;
 
-    void writeToFile(QString filename);
 
     /**
      * @brief addRecord - dodaje nowy record do bazy
      * @param record - dodawany rekord
      */
-    void addRecord(Record *record);
+    void addRecord(Record* &record);
 
     /**
      * @brief freeId zwraca następny wolny numer id w bazie
@@ -62,6 +76,20 @@ public:
 
     int getId() const;
 
+    Record* findRecord(int id);
+
+    virtual void saveToFiles();
+
+    bool clear();
+
+protected:
+    /**
+     * @brief writeToFile - zapisuje do pliku rekordy
+     * @param filename nazwa pliku wewnątrz floderu bazy
+     */
+    void writeToFile(QString filename);
+
+    void writeToFile(QString filename, const QList<Record*> &recordList);
 private:
     static void moveFiles(const QDir &source, const QDir &target);
 };

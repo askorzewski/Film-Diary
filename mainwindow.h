@@ -25,7 +25,7 @@ private slots:
 
     void deleteAccount(QString &name);
 
-    void reloadUi();
+    void reloadStartUi();
 
     void chooseAccount();
 
@@ -39,8 +39,17 @@ private slots:
 
     void on_buttonLoad_clicked();
 
-    void on_NewFilm_clicked();
+    void on_actionWyloguj_triggered();
 
+    void selectRecord();
+
+    void loadToTable(QList<Record*>);
+
+    void on_actionZapisz_triggered();
+
+    void on_main_new_clicked();
+
+    void on_main_edit_clicked();
 private:
     FilmData filmData = FilmData();
 
@@ -51,6 +60,8 @@ private:
     QDir dir = QDir::current();
 
     QString accountSelected = " ";
+
+    Record* recordSelected = nullptr;
 
     AccountData* data;
 };

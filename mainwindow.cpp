@@ -1,9 +1,10 @@
 //#include <iostream>
 #include "mainwindow.h"
-#include "./ui_MainWindow.h"
+#include "./ui_mainwindow.h"
 #include <QFileDialog>
 #include <QMessageBox>
-#include "FilmData.h"
+#include <QTextBrowser>
+#include "filmdata.h"
 #include "addfilm.h"
 
 //1366x718
@@ -14,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     loadAccountData();
-    reloadUi();
+    reloadStartUi();
 }
 
 MainWindow::~MainWindow()
@@ -25,8 +26,8 @@ MainWindow::~MainWindow()
 void MainWindow::loadAccountData(){
     QFile* accountFile = new QFile(dir.path() + "/Data/accounts.csv");
 
-    if(!accountFile->open(QIODevice::ReadWrite)) { //Sprawdź czy plik był wczytany
-        QMessageBox::information(0, "error", accountFile->errorString());
+    if(!accountFile->open(QIODevice::ReadOnly)) { //Sprawdź czy plik był wczytany
+        QMessageBox::information(0, "error", accountFile->fileName() + ": " + accountFile->errorString());
     }
 
     QTextStream data(accountFile); //Wczytaj z pliku do wektora obiektów
@@ -45,6 +46,7 @@ void MainWindow::deleteAccount(QString &name){
     QList<AccountData>::Iterator account = accounts.begin();
     while(account != accounts.end()){
         if(name == account->getName()){
+            account->clear();
             accounts.erase(account);
             break;
         }
@@ -56,10 +58,10 @@ void MainWindow::deleteAccount(QString &name){
     QFile temp_file = QFile(dir.path() + "/Data/temp_accounts.csv");
 
     if(!accountFile.open(QIODevice::ReadOnly)) {
-        QMessageBox::information(0, "error", accountFile.errorString());
+        QMessageBox::information(0, "error", accountFile.fileName() + ": " + accountFile.errorString());
     }
     if(!temp_file.open(QIODevice::WriteOnly)) {
-        QMessageBox::information(0, "error", temp_file.errorString());
+        QMessageBox::information(0, "error", temp_file.fileName() + ": " + temp_file.errorString());
     }
 
     QTextStream data(&accountFile);
@@ -75,15 +77,22 @@ void MainWindow::deleteAccount(QString &name){
         }
     }
     if(!accountFile.remove()){
-        QMessageBox::information(0, "error", accountFile.errorString());
+       QMessageBox::information(0, "error", accountFile.fileName() + ": " + accountFile.errorString());
     }
     if(!temp_file.rename("Data/accounts.csv")){
-        QMessageBox::information(0, "error", temp_file.errorString());
+        QMessageBox::information(0, "error", temp_file.fileName() + ": " + temp_file.errorString());
     }
 
 }
 
-void MainWindow::reloadUi(){
+
+
+
+/*
+ * Start Screen
+*/
+
+void MainWindow::reloadStartUi(){
     QList<QPushButton*> existingButtons = ui->verticalLayoutWidget->findChildren<QPushButton*>(NULL);
     for(QPushButton* button : existingButtons){
         button->disconnect();
@@ -116,66 +125,14 @@ void MainWindow::chooseAccount(){
 
 
 
-// void MainWindow::on_przyciskWczytaj_clicked()
-// {
-//     //Wybieranie folderu z plikami - później automatycznie przy wyborze konta
-//     QFileDialog dialog(this);
-//     QStringList* selectedDirList = new QStringList;
-//     dialog.setFileMode(QFileDialog::Directory);
-//     if (dialog.exec())
-//             *selectedDirList = dialog.selectedFiles();
-//     QString selectedDir = selectedDirList->constFirst();
-//     delete selectedDirList;
-
-//     //Tworzenie listy plików na podstawie wybranego folderu
-//     QString fileToRead =selectedDir.append("/films.csv");
-//     refreshTable(global_data.getRecords());
-// }
-
-// //void MainWindow::refreshTable(const AccountData &data){
-// //
-// //}
-
-// void MainWindow::refreshTable(const QList<Record*> &idList){
-//     QListWidget* table = this->ui->tabela;
-//     table->clear();
-
-//     for(int i = 0; i<idList.length(); i++){
-//         Film* loadedFilm;
-//         loadedFilm = dynamic_cast<Film*>(idList[i]);
-//         QString displayText = loadedFilm->getName() + " (" + loadedFilm->getYear() + ")" + " Dir. " + loadedFilm->getDirector();
-//         if(loadedFilm->tags.length()!=0){
-//             displayText.append("   Tags: ");
-//         }
-//         for(QString tag : loadedFilm->tags){
-//             displayText.append(tag + ", ");
-//         }
-//         table->addItem(displayText);
-//     }
-// }
-
-
-void MainWindow::on_NewFilm_clicked()
-{
-    AddFilm form(this);
-    form.exec();
-    Film newFilm = Film();
-    newFilm = (form.getData(filmData.freeId()));
-    for(QString tag : form.getTags()){
-        newFilm.addTag(tag);
-    }
-    filmData.addRecord(&newFilm);
-    //this->refreshTable(filmData.getRecords());
-}
-
-
 void MainWindow::on_buttonDelete_clicked()
 {
     if(accountSelected == " "){
         return;
     }
     deleteAccount(accountSelected);
-    reloadUi();
+    accountSelected = " ";
+    reloadStartUi();
 }
 
 
@@ -187,10 +144,15 @@ void MainWindow::on_buttonNew_clicked()
 
 
 
-
 void MainWindow::on_buttonBox_accepted()
 {
-    int freeId = accounts.last().getId()+1;
+    int freeId;
+    if(accounts.empty()){
+        freeId = 1;
+    }
+    else {
+        freeId = accounts.last().getId()+1;
+    }
     QLineEdit* name_container = ui->addNazwa->findChild<QLineEdit*>(NULL);
     QString name = name_container->text();
 
@@ -200,10 +162,14 @@ void MainWindow::on_buttonBox_accepted()
     ui->addNazwa->setFixedSize(0,0);
 
     QFile accountFile = QFile("Data/accounts.csv");
-    if(!accountFile.rename("Data/accounts.csv")){
-        QMessageBox::information(0, "error", accountFile.errorString());
+    if(!accountFile.open(QIODevice::Append)){
+        QMessageBox::information(0, "error", accountFile.fileName() + ": " + accountFile.errorString());
     }
-    reloadUi();
+    QTextStream accountStream(&accountFile);
+
+    accountStream<<QString::number(freeId)<<","<<name<<Qt::endl;
+    accountFile.close();
+    reloadStartUi();
 }
 
 
@@ -218,10 +184,95 @@ void MainWindow::on_buttonLoad_clicked()
     if(accountSelected == " "){
         return;
     }
+    for(AccountData &account : accounts){
+        if(accountSelected == account.getName()){
+            data = &account;
+        }
+    }
     ui->startScreen->setFixedSize(0,0);
     ui->mainScreen->setFixedSize(1366,718);
+    this->loadToTable(data->getRecords(1));
+}
+
+
+void MainWindow::on_actionWyloguj_triggered()
+{
+    ui->startScreen->setFixedSize(1366,718);
+    ui->mainScreen->setFixedSize(0,0);
 }
 
 
 
+/*
+ * Main Screen
+*/
+
+void MainWindow::loadToTable(QList<Record*> records){
+    QGridLayout* table = ui->mainScreen->currentWidget()->findChild<QGridLayout*>(NULL);
+    for(Record* recordData : records){
+        if(recordData == nullptr){
+            continue;
+        }
+        QPushButton* recordInTable = new QPushButton();
+        table->addWidget(recordInTable);
+        recordInTable->setObjectName(QString::number(recordData->getId()));
+        recordInTable->setCheckable(true);
+        recordInTable->setFixedSize(400,100);
+        recordInTable->setFlat(true);
+        recordInTable->setText(recordData->getLabel());
+        QObject::connect (recordInTable,SIGNAL(clicked(bool)),this,SLOT(selectRecord()));
+    }
+}
+
+void MainWindow::selectRecord(){
+    if(recordSelected != nullptr){
+        QPushButton* toggledbutton = findChild<QPushButton*>(QString::number(recordSelected->getId()));
+        toggledbutton->toggle();
+    }
+    QObject* sender = QObject::sender();
+    recordSelected = data->findRecord(sender->objectName().toInt());
+}
+
+
+void MainWindow::on_main_edit_clicked(){
+    int tabIndex = this->ui->mainScreen->currentIndex();
+    switch(tabIndex){
+    case 1:
+        int recordId = this->recordSelected->getId();
+        AddFilm form(this);
+        form.exec();
+        //Film newFilm = Film();
+    }
+}
+
+void MainWindow::on_actionZapisz_triggered()
+{
+    data->saveToFiles();
+    filmData.saveToFiles();
+}
+
+
+void MainWindow::on_main_new_clicked()
+{
+    int tabIndex = this->ui->mainScreen->currentIndex();
+    switch(tabIndex){
+    case 0:
+        break;
+    case 1:
+        AddFilm form(this);
+        form.exec();
+        Film* newFilm = new Film(form.getData(filmData.freeId()));
+        for(QString tag : form.getTags()){
+            newFilm->addTag(tag);
+        }
+        Record* filmRecord = newFilm;
+        filmData.addRecord(filmRecord);
+        filmData.addFilm(*newFilm);
+        data->addToWatchlist(newFilm);
+        this->loadToTable(data->getRecords(1));
+        break;
+    }
+
+
+}
 

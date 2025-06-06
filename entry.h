@@ -1,6 +1,7 @@
 #ifndef ENTRY_H
 #define ENTRY_H
 #include "film.h"
+#include "record.h"
 #include <QDate>
 
 /**
@@ -16,7 +17,9 @@ class Entry : public Record
 
     QDate date;
 public:
-    Entry();
+    Entry(int id);
+
+    QString getLabel();
 };
 
 #endif // ENTRY_H

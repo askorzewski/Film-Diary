@@ -15,22 +15,25 @@ class Film : public Record
 
 public:
     QStringList tags;
-    Film();
+    Film(int id);
     Film(int id, QString name, QString director, QString year);
 
+
     //get methods
-    int getId() const;
     QString getName() const;
     QString getDirector() const;
     QString getYear() const;
 
-    void addTag(const QString& tag);
+    void addTag(const QString &tag);
 
     /**
      * @brief toText
      * @return Dane obiektu w formie tekstowej do zapisu w pliku
      */
     QString toText();
+
+    QString getLabel();
+
 private:
 
 };

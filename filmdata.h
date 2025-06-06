@@ -8,15 +8,19 @@
  */
 class FilmData : public Database
 {
-    QList<Film*> filmList;
+    QList<Film> filmList;
 
 
 public:
-    FilmData();
+    FilmData(); //Global filmdata
+    FilmData(Database* account); //Account-specific filmdata
 
-    QList<Film*> getFilms() const;
+    QList<Film> getFilms() const;
 
     void readFilmFile(const QString &fileName);
 
+    void saveToFiles();
+
+    void addFilm(Film &film);
 };
 #endif // FILMDATA_H
