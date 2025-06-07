@@ -35,6 +35,9 @@
    <string>FilmDiary</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <widget class="QPushButton" name="przyciskWczytaj">
     <property name="enabled">
      <bool>true</bool>
@@ -63,7 +66,7 @@
       <x>0</x>
       <y>0</y>
       <width>1366</width>
-      <height>718</height>
+      <height>0</height>
      </rect>
     </property>
     <widget class="QWidget" name="verticalLayoutWidget_2">
@@ -268,7 +271,7 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>0</width>
+      <width>1366</width>
       <height>718</height>
      </rect>
     </property>
@@ -296,33 +299,108 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>1331</width>
-        <height>501</height>
+        <width>1311</width>
+        <height>531</height>
        </rect>
       </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
+      </property>
       <property name="widgetResizable">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <widget class="QWidget" name="scrollAreaWidgetContents">
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>0</y>
-         <width>1329</width>
-         <height>499</height>
+         <y>-20</y>
+         <width>1300</width>
+         <height>700</height>
         </rect>
        </property>
-       <widget class="QWidget" name="gridLayoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>1321</width>
-          <height>501</height>
-         </rect>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>1300</width>
+         <height>700</height>
+        </size>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="sizeConstraint">
+         <enum>QLayout::SizeConstraint::SetMinimumSize</enum>
         </property>
-        <layout class="QGridLayout" name="watchlistTable"/>
-       </widget>
+        <item>
+         <layout class="QVBoxLayout" name="WatchRow0">
+          <property name="sizeConstraint">
+           <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
+          </property>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="WatchRow1">
+          <property name="sizeConstraint">
+           <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
+          </property>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="WatchRow2" stretch="0">
+          <property name="sizeConstraint">
+           <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
+          </property>
+          <item>
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </widget>
      <widget class="QWidget" name="horizontalLayoutWidget">
@@ -334,7 +412,7 @@
         <height>101</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="utiltyFilms">
+      <layout class="QHBoxLayout" name="utiltyMain">
        <property name="spacing">
         <number>100</number>
        </property>

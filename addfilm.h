@@ -15,7 +15,7 @@ class AddFilm : public QDialog
 {
     Q_OBJECT
 public:
-    explicit AddFilm(QWidget *parent = nullptr);
+    explicit AddFilm(QWidget *parent = nullptr, Film *film = nullptr);
     ~AddFilm();
     /**
      * @brief getData
@@ -29,6 +29,8 @@ public:
 private slots:
     void on_buttonBox_accepted();
 
+    void on_buttonBox_rejected();
+
 private:
     Ui::AddFilm *ui;
 
@@ -36,6 +38,8 @@ private:
     QString director;
     QString year;
     QStringList tags;
+
+    bool canceled;
 };
 
 #endif // ADDFILM_H

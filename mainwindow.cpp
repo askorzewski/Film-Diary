@@ -4,8 +4,10 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextBrowser>
+#include <QRegularExpression>
 #include "filmdata.h"
 #include "addfilm.h"
+
 
 //1366x718
 
@@ -208,18 +210,31 @@ void MainWindow::on_actionWyloguj_triggered()
 */
 
 void MainWindow::loadToTable(QList<Record*> records){
-    QGridLayout* table = ui->mainScreen->currentWidget()->findChild<QGridLayout*>(NULL);
+    QList<QPushButton*> existingButtons = ui->mainScreen->currentWidget()->findChildren<QPushButton*>(QRegularExpression("^[0-9]+$"));
+    for(QPushButton* button : existingButtons){
+        button->disconnect();
+        button->setVisible(false);
+        button->deleteLater();
+        button->close();
+    }
+    //Switch/case for tab later
+    int row = 0;
+    QString tabName = "WatchRow";
     for(Record* recordData : records){
+        row = row % 3;
+        QString tableName = QString(tabName + QString::number(row));
+        row++;
+        QVBoxLayout* table = ui->mainScreen->currentWidget()->findChild<QVBoxLayout*>(tableName);
         if(recordData == nullptr){
             continue;
         }
         QPushButton* recordInTable = new QPushButton();
-        table->addWidget(recordInTable);
+        table->insertWidget(0, recordInTable);
         recordInTable->setObjectName(QString::number(recordData->getId()));
         recordInTable->setCheckable(true);
-        recordInTable->setFixedSize(400,100);
         recordInTable->setFlat(true);
         recordInTable->setText(recordData->getLabel());
+        recordInTable->resize(recordInTable->sizeHint().width(), (recordInTable->sizeHint().height())+100);
         QObject::connect (recordInTable,SIGNAL(clicked(bool)),this,SLOT(selectRecord()));
     }
 }
@@ -230,18 +245,26 @@ void MainWindow::selectRecord(){
         toggledbutton->toggle();
     }
     QObject* sender = QObject::sender();
-    recordSelected = data->findRecord(sender->objectName().toInt());
+    recordSelected = data->watchlist.findRecord(sender->objectName().toInt());
 }
 
 
 void MainWindow::on_main_edit_clicked(){
+    if(recordSelected==nullptr){
+        return;
+    }
     int tabIndex = this->ui->mainScreen->currentIndex();
     switch(tabIndex){
     case 1:
         int recordId = this->recordSelected->getId();
-        AddFilm form(this);
+
+        filmData.deleteRecord(recordId);
+        data->watchlist.deleteRecord(recordId);
+        AddFilm form(this, static_cast<Film*>(recordSelected));
         form.exec();
-        //Film newFilm = Film();
+
+        Film newFilm = form.getData(recordId);
+        filmData.swapRecord(&newFilm);
     }
 }
 
@@ -269,7 +292,7 @@ void MainWindow::on_main_new_clicked()
         filmData.addRecord(filmRecord);
         filmData.addFilm(*newFilm);
         data->addToWatchlist(newFilm);
-        this->loadToTable(data->getRecords(1));
+        this->loadToTable(data->watchlist.getRecords());
         break;
     }
 

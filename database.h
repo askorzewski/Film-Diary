@@ -51,7 +51,7 @@ public:
      * @brief getRecords
      * @return Lista wskaźników na rekordy bazqy
      */
-    QList<Record*> getRecords(int recordType = 0) const;
+    QList<Record*> getRecords() const;
 
     /**
      * @brief getDir
@@ -78,10 +78,13 @@ public:
 
     Record* findRecord(int id);
 
-    virtual void saveToFiles();
+    void deleteRecord(int id);
+
+    virtual void saveToFiles() = 0;
 
     bool clear();
 
+    void swapRecord(Record* record);
 protected:
     /**
      * @brief writeToFile - zapisuje do pliku rekordy

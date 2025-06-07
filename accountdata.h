@@ -9,9 +9,9 @@ class AccountData : public Database
 {
     QList<Record*> entries;
 
+public:
     FilmData watchlist = FilmData(this);
 
-public:
     AccountData(int id);
 
     QString getName() const;

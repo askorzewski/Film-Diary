@@ -59,12 +59,10 @@ Database::~Database(){
 
 
 void Database::addRecord(Record* &record){
-
     if(!usedId.contains(record->getId())){
         usedId.append(record->getId());
     }
     records.emplaceBack(record);
-
 }
 
 int Database::freeId(){
@@ -74,7 +72,7 @@ int Database::freeId(){
 }
 
 //Dla typów listy recordów możesz potem uzyc enuma
-QList<Record*> Database::getRecords(int recordType) const{
+QList<Record*> Database::getRecords() const{
     return this->records;
 }
 
@@ -94,7 +92,6 @@ void Database::writeToFile(QString filename, const QList<Record*> &recordList){
             QString recordText = record->toText();
             stream<<recordText;
         }
-        stream<<Qt::endl;
     }
     file.close();
 }
@@ -134,7 +131,11 @@ Record* Database::findRecord(int id){
     return nullptr;
 }
 
-void Database::saveToFiles(){}
+void Database::deleteRecord(int id){
+    Record* rec = findRecord(id);
+    records.removeOne(rec);
+}
+//void Database::saveToFiles(){}
 
 bool Database::clear(){
     QStringList files = directory.entryList();
@@ -151,4 +152,8 @@ bool Database::clear(){
     return 0;
 }
 
+void Database::swapRecord(Record *record){
+    Record *originalRecord = findRecord(record->getId());
+    *originalRecord = *record;
+}
 

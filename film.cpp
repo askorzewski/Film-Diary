@@ -34,13 +34,12 @@ void Film::addTag(const QString& tag){
 }
 
 QString Film::toText(){
-    if(tags.empty()) {
-        return QString(QString::number(id) + "," + name + "," + director + ",NULL");
+    if(tags.empty()|| tags[0]== " "||tags[0]=="") {
+        return QString(QString::number(id) + "," + name + "," + director + "," + year + ",NULL" + "\n");
     }
     QString output;
     for(QString tag : tags){
-        output = QString(QString::number(id) + "," + name + "," + director + ",");
-        output.append(tag);
+        output.append(QString(QString::number(id) + "," + name + "," + director + "," + year + ", " + tag + "\n" ));
     }
     return output;
 }
