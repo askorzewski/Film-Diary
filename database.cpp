@@ -136,6 +136,12 @@ void Database::deleteRecord(int id){
     Record* rec = findRecord(id);
     records.removeOne(rec);
 }
+
+void Database::deleteRecord(Record* rec){
+    int id = rec->getId();
+    records.removeOne(rec);
+    usedId.removeOne(id);
+}
 //void Database::saveToFiles(){}
 
 bool Database::clear(){
@@ -155,6 +161,8 @@ bool Database::clear(){
 
 void Database::swapRecord(Record *record){
     Record *originalRecord = findRecord(record->getId());
-    *originalRecord = *record;
+    int index = records.indexOf(originalRecord);
+    records.removeAll(originalRecord);
+    records.insert(index, record);
 }
 

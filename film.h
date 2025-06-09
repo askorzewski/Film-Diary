@@ -18,7 +18,6 @@ public:
     Film(int id);
     Film(int id, QString name, QString director, QString year);
 
-
     //get methods
     QString getName() const;
     QString getDirector() const;

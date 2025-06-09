@@ -1,15 +1,14 @@
 #include "film.h"
 
 Film::Film(int id) : Record(id){
-
 }
 
 Film::Film(int id, QString name, QString director, QString year) :
     Record(id),
     name(name),
     director(director),
-    year(year)
-{}
+    year(year){
+}
 
 QString Film::getName() const{
     return this->name;

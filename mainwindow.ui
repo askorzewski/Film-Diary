@@ -270,9 +270,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>0</y>
+      <y>10</y>
       <width>1366</width>
-      <height>718</height>
+      <height>591</height>
      </rect>
     </property>
     <property name="font">
@@ -283,19 +283,19 @@
      </font>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="entries">
      <attribute name="title">
       <string>Wpisy</string>
      </attribute>
-     <widget class="QScrollArea" name="scrollArea_2">
+     <widget class="QScrollArea" name="scrollEntries">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>1311</width>
-        <height>531</height>
+        <width>1310</width>
+        <height>540</height>
        </rect>
       </property>
       <property name="verticalScrollBarPolicy">
@@ -304,58 +304,33 @@
       <property name="horizontalScrollBarPolicy">
        <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
       </property>
-      <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
-      </property>
       <property name="widgetResizable">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <widget class="QWidget" name="scrollAreaWidgetContents_2">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1300</width>
-         <height>700</height>
+         <width>1291</width>
+         <height>538</height>
         </rect>
        </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>1300</width>
-         <height>700</height>
-        </size>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <property name="sizeConstraint">
-         <enum>QLayout::SizeConstraint::SetMinimumSize</enum>
+       <widget class="QWidget" name="verticalLayoutWidget_3">
+        <property name="geometry">
+         <rect>
+          <x>9</x>
+          <y>9</y>
+          <width>1291</width>
+          <height>511</height>
+         </rect>
         </property>
-        <item>
-         <layout class="QVBoxLayout" name="EntryTable">
-          <property name="sizeConstraint">
-           <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
-          </property>
-          <item>
-           <spacer name="verticalSpacer_4">
-            <property name="orientation">
-             <enum>Qt::Orientation::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-       </layout>
+        <layout class="QVBoxLayout" name="EntriesTable">
+         <property name="sizeConstraint">
+          <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
+         </property>
+        </layout>
+       </widget>
       </widget>
      </widget>
     </widget>
@@ -363,13 +338,13 @@
      <attribute name="title">
       <string>Do Obejrzenia</string>
      </attribute>
-     <widget class="QScrollArea" name="scrollArea">
+     <widget class="QScrollArea" name="scrollWatchlist">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>1311</width>
-        <height>531</height>
+        <width>1310</width>
+        <height>540</height>
        </rect>
       </property>
       <property name="verticalScrollBarPolicy">
@@ -410,7 +385,7 @@
          <enum>QLayout::SizeConstraint::SetMinimumSize</enum>
         </property>
         <item>
-         <layout class="QVBoxLayout" name="WatchRow0">
+         <layout class="QVBoxLayout" name="WatchlistTable">
           <property name="sizeConstraint">
            <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
           </property>
@@ -429,90 +404,130 @@
           </item>
          </layout>
         </item>
-        <item>
-         <layout class="QVBoxLayout" name="WatchRow1">
-          <property name="sizeConstraint">
-           <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
-          </property>
-          <item>
-           <spacer name="verticalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Orientation::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="WatchRow2" stretch="0">
-          <property name="sizeConstraint">
-           <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
-          </property>
-          <item>
-           <spacer name="verticalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Orientation::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
        </layout>
       </widget>
      </widget>
-     <widget class="QWidget" name="horizontalLayoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>420</x>
-        <y>540</y>
-        <width>921</width>
-        <height>101</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="utiltyMain">
-       <property name="spacing">
-        <number>100</number>
-       </property>
-       <item>
-        <widget class="QPushButton" name="main_new">
-         <property name="text">
-          <string>Nowy</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="main_delete">
-         <property name="text">
-          <string>Usuń</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="main_edit">
-         <property name="text">
-          <string>Edytuj</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
     </widget>
+   </widget>
+   <widget class="QWidget" name="mainUtility" native="true">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>610</y>
+      <width>1310</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="utiltyMain">
+     <property name="spacing">
+      <number>100</number>
+     </property>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="main_open">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Bahnschrift</family>
+         <pointsize>28</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Otwórz</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="main_new">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Bahnschrift</family>
+         <pointsize>28</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Nowy</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="main_delete">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Bahnschrift</family>
+         <pointsize>28</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Usuń</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="main_edit">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Bahnschrift</family>
+         <pointsize>28</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Edytuj</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
    <zorder>przyciskWczytaj</zorder>
    <zorder>mainScreen</zorder>
    <zorder>startScreen</zorder>
+   <zorder>mainUtility</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -520,7 +535,7 @@
      <x>0</x>
      <y>0</y>
      <width>1366</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOpcje">

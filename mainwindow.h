@@ -53,6 +53,10 @@ private slots:
 
     void on_main_edit_clicked();
 
+    void on_mainScreen_currentChanged(int index);
+
+    void on_main_delete_clicked();
+
 private:
     FilmData filmData = FilmData();
 
