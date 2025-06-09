@@ -19,7 +19,11 @@ class Entry : public Record
 public:
     Entry(int id);
 
+    Entry(int id, Film* &film, int star_rating, const QString &text_rating, const QDate &date);
+
     QString getLabel();
+
+    QString toText();
 };
 
 #endif // ENTRY_H

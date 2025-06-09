@@ -2,7 +2,7 @@
 #include <QMessagebox>
 
 FilmData::FilmData() {
-    readFilmFile(directory.path() + "/films.csv");
+    readFile(directory.path() + "/films.csv");
 
 }
 
@@ -10,10 +10,10 @@ FilmData::FilmData() {
 FilmData::FilmData(Database* account){
     this->id = account->getId();
     directory = account->getDir();
-    readFilmFile(account->getDir() + "/watchlist.csv");
+    readFile(account->getDir() + "/watchlist.csv");
 }
 
-void FilmData::readFilmFile(const QString &fileName){
+void FilmData::readFile(const QString &fileName){
     QFile* filmFile = new QFile(fileName);
 
     if(!filmFile->open(QIODevice::ReadOnly)) {

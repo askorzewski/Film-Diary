@@ -14,7 +14,7 @@ private:
 
     friend class film;
 
-    void readFilmFile(const QString &fileName);
+    void readFile(const QString &fileName);
 public:
     FilmData(); //Global filmdata
     FilmData(Database* account); //Account-specific filmdata

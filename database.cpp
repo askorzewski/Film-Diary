@@ -58,6 +58,7 @@ Database::~Database(){
 }
 
 
+
 void Database::addRecord(Record* &record){
     if(!usedId.contains(record->getId())){
         usedId.append(record->getId());
@@ -96,7 +97,7 @@ void Database::writeToFile(QString filename, const QList<Record*> &recordList){
     file.close();
 }
 
-void Database::writeToFile(QString filename){
+void Database::writeToFile(const QString &filename){
     writeToFile(filename, records);
 }
 

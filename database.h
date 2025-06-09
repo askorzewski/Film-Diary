@@ -44,8 +44,10 @@ public:
      * @param id - id bazy danych
      * @param path - ścieżka do zawnętrznej bazy
      */
-    Database(int id, QString path);
+    Database(int id, const QString path);
     ~Database();
+
+    virtual void readFile(const QString &fileName) = 0;
 
     /**
      * @brief getRecords
@@ -90,7 +92,7 @@ protected:
      * @brief writeToFile - zapisuje do pliku rekordy
      * @param filename nazwa pliku wewnątrz floderu bazy
      */
-    void writeToFile(QString filename);
+    void writeToFile(const QString &filename);
 
     void writeToFile(QString filename, const QList<Record*> &recordList);
 private:

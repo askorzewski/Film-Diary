@@ -25,6 +25,10 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+/*
+ * Start Screen
+*/
+
 void MainWindow::loadAccountData(){
     QFile* accountFile = new QFile(dir.path() + "/Data/accounts.csv");
 
@@ -36,7 +40,7 @@ void MainWindow::loadAccountData(){
     while(!data.atEnd()){
         QString line = data.readLine();
         QStringList fields = line.split(",");
-        AccountData newAccount = AccountData(fields[0].toInt());
+        AccountData newAccount = AccountData(&filmData, fields[0].toInt());
         newAccount.setName(fields[1]);
         accounts.append(newAccount);
     }
@@ -86,13 +90,6 @@ void MainWindow::deleteAccount(QString &name){
     }
 
 }
-
-
-
-
-/*
- * Start Screen
-*/
 
 void MainWindow::reloadStartUi(){
     QList<QPushButton*> existingButtons = ui->verticalLayoutWidget->findChildren<QPushButton*>(NULL);
@@ -158,7 +155,7 @@ void MainWindow::on_buttonBox_accepted()
     QLineEdit* name_container = ui->addNazwa->findChild<QLineEdit*>(NULL);
     QString name = name_container->text();
 
-    AccountData newAccount(freeId);
+    AccountData newAccount(&filmData, freeId);
     newAccount.setName(name);
     accounts.append(newAccount);
     ui->addNazwa->setFixedSize(0,0);

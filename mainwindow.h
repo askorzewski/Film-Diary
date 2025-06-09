@@ -15,6 +15,8 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+    friend class AccountData;
+
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -50,6 +52,7 @@ private slots:
     void on_main_new_clicked();
 
     void on_main_edit_clicked();
+
 private:
     FilmData filmData = FilmData();
 
