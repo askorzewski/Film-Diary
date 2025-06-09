@@ -80,6 +80,8 @@ public:
 
     void deleteRecord(int id);
 
+    void deleteRecord(Record *record);
+
     virtual void saveToFiles() = 0;
 
     bool clear();

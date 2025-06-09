@@ -12,7 +12,7 @@ private:
 
     QList<Film> filmList;
 
-    friend class film;
+    //friend class film;
 
     void readFilmFile(const QString &fileName);
 public:
@@ -24,6 +24,8 @@ public:
     void saveToFiles();
 
     void addFilm(Film &film);
+
+    void swapFilm(Film &film);
 };
 
 #endif // FILMDATA_H

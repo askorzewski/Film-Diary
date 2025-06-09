@@ -154,6 +154,8 @@ bool Database::clear(){
 
 void Database::swapRecord(Record *record){
     Record *originalRecord = findRecord(record->getId());
-    *originalRecord = *record;
+    int index = records.indexOf(originalRecord);
+    records.removeAll(originalRecord);
+    records.insert(index, record);
 }
 

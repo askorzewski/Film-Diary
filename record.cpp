@@ -4,6 +4,6 @@ Record::Record(int id) : id(id) {
 }
 
 int Record::getId() const{
-    return this->id;
+    return this->xD;
 }
 

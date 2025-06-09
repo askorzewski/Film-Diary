@@ -7,16 +7,19 @@
  */
 class AccountData : public Database
 {
+    friend class MainWindow;
+
     QList<Record*> entries;
 
-public:
     FilmData watchlist = FilmData(this);
+public:
+
 
     AccountData(int id);
 
     QString getName() const;
 
-    void addToWatchlist(Film* &film);
+    void addToWatchlist(Film &film);
 
     QList<Record*> getRecords(int recordType = 0) const;
 

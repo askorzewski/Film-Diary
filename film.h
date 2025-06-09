@@ -3,6 +3,7 @@
 #include <QString>
 #include <QStringList>
 #include "record.h"
+#include "entry.h"
 /**
  * @brief Klasa Film opisuje dany film
  */
@@ -17,7 +18,7 @@ public:
     QStringList tags;
     Film(int id);
     Film(int id, QString name, QString director, QString year);
-
+    Film operator=(Entry &entry);
 
     //get methods
     QString getName() const;

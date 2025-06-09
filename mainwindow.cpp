@@ -193,7 +193,8 @@ void MainWindow::on_buttonLoad_clicked()
     }
     ui->startScreen->setFixedSize(0,0);
     ui->mainScreen->setFixedSize(1366,718);
-    this->loadToTable(data->getRecords(1));
+    ui->mainUtility->setFixedSize(1310, 100);
+    this->loadToTable(data->watchlist.getRecords());
 }
 
 
@@ -201,6 +202,7 @@ void MainWindow::on_actionWyloguj_triggered()
 {
     ui->startScreen->setFixedSize(1366,718);
     ui->mainScreen->setFixedSize(0,0);
+    ui->mainUtility->setFixedSize(0,0);
 }
 
 
@@ -216,14 +218,12 @@ void MainWindow::loadToTable(QList<Record*> records){
         button->setVisible(false);
         button->deleteLater();
         button->close();
+        recordSelected = nullptr;
     }
     //Switch/case for tab later
-    int row = 0;
     QString tabName = "WatchRow";
     for(Record* recordData : records){
-        row = row % 3;
-        QString tableName = QString(tabName + QString::number(row));
-        row++;
+        QString tableName = QString("WatchlistTable");
         QVBoxLayout* table = ui->mainScreen->currentWidget()->findChild<QVBoxLayout*>(tableName);
         if(recordData == nullptr){
             continue;
@@ -257,15 +257,19 @@ void MainWindow::on_main_edit_clicked(){
     switch(tabIndex){
     case 1:
         int recordId = this->recordSelected->getId();
-
-        filmData.deleteRecord(recordId);
-        data->watchlist.deleteRecord(recordId);
         AddFilm form(this, static_cast<Film*>(recordSelected));
         form.exec();
-
-        Film newFilm = form.getData(recordId);
+        Film newFilm = Film(form.getData(recordId));
+        for(QString tag : form.getTags()){
+            newFilm.addTag(tag);
+        }
+        if(newFilm.getId() == 0){
+            return;
+        }
         filmData.swapRecord(&newFilm);
+        data->watchlist.swapRecord(&newFilm);
     }
+    loadToTable(data->watchlist.getRecords());
 }
 
 void MainWindow::on_actionZapisz_triggered()
@@ -284,18 +288,34 @@ void MainWindow::on_main_new_clicked()
     case 1:
         AddFilm form(this);
         form.exec();
-        Film* newFilm = new Film(form.getData(filmData.freeId()));
-        for(QString tag : form.getTags()){
-            newFilm->addTag(tag);
+        Film newFilm = Film(form.getData(filmData.freeId()));
+        if(newFilm.getId()==0){
+            return;
         }
-        Record* filmRecord = newFilm;
-        filmData.addRecord(filmRecord);
-        filmData.addFilm(*newFilm);
-        data->addToWatchlist(newFilm);
+        for(QString tag : form.getTags()){
+            newFilm.addTag(tag);
+        }
+        filmData.addFilm(newFilm);
+        data->watchlist.addFilm(newFilm);
         this->loadToTable(data->watchlist.getRecords());
         break;
     }
+}
 
 
+void MainWindow::on_mainScreen_currentChanged(int index)
+{
+    if(index!=0){
+        ui->main_open->setVisible(false);
+    }
+    else{
+        ui->main_open->setVisible(true);
+    }
+}
+
+
+void MainWindow::on_main_delete_clicked()
+{
+    data->watchlist.deleteRecord(recordSelected);
 }
 
