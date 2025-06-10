@@ -10,6 +10,8 @@ class Record
 public:
     Record(int id);
 
+    virtual ~Record();
+
     QString virtual toText() = 0;
 
     QString virtual getLabel() = 0;

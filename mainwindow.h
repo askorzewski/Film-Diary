@@ -45,7 +45,7 @@ private slots:
 
     void selectRecord();
 
-    void loadToTable(QList<Record*>);
+    void refreshTable();
 
     void on_actionZapisz_triggered();
 
@@ -56,6 +56,15 @@ private slots:
     void on_mainScreen_currentChanged(int index);
 
     void on_main_delete_clicked();
+
+    void addNewFilm();
+    void addNewEntry();
+    void addNewEntry(Film *film);
+
+    void chooseFromWatchlist();
+    void returnFromChoosingWatchlist();
+
+    void on_main_open_clicked();
 
 private:
     FilmData filmData = FilmData();

@@ -21,7 +21,11 @@ public:
 
     Entry(int id, Film* &film, int star_rating, const QString &text_rating, const QDate &date);
 
+    ~Entry();
+
     QString getLabel();
+
+    Film* getFilm() const;
 
     QString toText();
 };

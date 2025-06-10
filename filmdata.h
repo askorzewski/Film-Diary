@@ -12,8 +12,6 @@ private:
 
     QList<Film> filmList;
 
-    //friend class film;
-
     void readFile(const QString &fileName);
 public:
     FilmData(); //Global filmdata

@@ -10,6 +10,12 @@ Film::Film(int id, QString name, QString director, QString year) :
     year(year){
 }
 
+
+
+Film::~Film(){
+
+}
+
 QString Film::getName() const{
     return this->name;
 }

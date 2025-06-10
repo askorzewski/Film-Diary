@@ -7,3 +7,5 @@ int Record::getId() const{
     return this->id;
 }
 
+Record::~Record(){
+}

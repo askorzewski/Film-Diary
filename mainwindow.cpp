@@ -5,8 +5,10 @@
 #include <QMessageBox>
 #include <QTextBrowser>
 #include <QRegularExpression>
+#include <QTabBar>
 #include "filmdata.h"
 #include "addfilm.h"
+#include "addentry.h"
 
 
 //1366x718
@@ -78,8 +80,7 @@ void MainWindow::deleteAccount(QString &name){
         if(fields[0]==strId){
         }
         else{
-            out<<line;
-            out<<Qt::endl;
+            out<<line<<"/n";
         }
     }
     if(!accountFile.remove()){
@@ -191,7 +192,7 @@ void MainWindow::on_buttonLoad_clicked()
     ui->startScreen->setFixedSize(0,0);
     ui->mainScreen->setFixedSize(1366,718);
     ui->mainUtility->setFixedSize(1310, 100);
-    this->loadToTable(data->watchlist.getRecords());
+    this->refreshTable();
 }
 
 
@@ -208,7 +209,20 @@ void MainWindow::on_actionWyloguj_triggered()
  * Main Screen
 */
 
-void MainWindow::loadToTable(QList<Record*> records){
+void MainWindow::refreshTable()
+{
+    int tabIndex = ui->mainScreen->currentIndex();
+    QList<Record*> records;
+    switch(tabIndex){
+    case 0:
+        records = data->getRecords();
+        break;
+    case 1:
+        records = data->watchlist.getRecords();
+        break;
+    case 2:
+        return;
+    }
     QList<QPushButton*> existingButtons = ui->mainScreen->currentWidget()->findChildren<QPushButton*>(QRegularExpression("^[0-9]+$"));
     for(QPushButton* button : existingButtons){
         button->disconnect();
@@ -217,11 +231,20 @@ void MainWindow::loadToTable(QList<Record*> records){
         button->close();
         recordSelected = nullptr;
     }
-    //Switch/case for tab later
-    QString tabName = "WatchRow";
+
+    QString tableName;
+    switch(ui->mainScreen->currentIndex()){
+    case 0:
+        tableName = "EntriesTable";
+        break;
+    case 1:
+        tableName = "WatchlistTable";
+        break;
+    case 2:
+        return;
+    }
+    QVBoxLayout* table = ui->mainScreen->currentWidget()->findChild<QVBoxLayout*>(tableName);
     for(Record* recordData : records){
-        QString tableName = QString("WatchlistTable");
-        QVBoxLayout* table = ui->mainScreen->currentWidget()->findChild<QVBoxLayout*>(tableName);
         if(recordData == nullptr){
             continue;
         }
@@ -229,7 +252,6 @@ void MainWindow::loadToTable(QList<Record*> records){
         table->insertWidget(0, recordInTable);
         recordInTable->setObjectName(QString::number(recordData->getId()));
         recordInTable->setCheckable(true);
-        recordInTable->setFlat(true);
         recordInTable->setText(recordData->getLabel());
         recordInTable->resize(recordInTable->sizeHint().width(), (recordInTable->sizeHint().height())+100);
         QObject::connect (recordInTable,SIGNAL(clicked(bool)),this,SLOT(selectRecord()));
@@ -256,17 +278,18 @@ void MainWindow::on_main_edit_clicked(){
         int recordId = this->recordSelected->getId();
         AddFilm form(this, static_cast<Film*>(recordSelected));
         form.exec();
-        Film newFilm = Film(form.getData(recordId));
+        Film *newFilm = new Film(form.getData(recordId));
         for(QString tag : form.getTags()){
-            newFilm.addTag(tag);
+            newFilm->addTag(tag);
         }
-        if(newFilm.getId() == 0){
+        if(newFilm->getId() == 0){
             return;
         }
-        filmData.swapRecord(&newFilm);
-        data->watchlist.swapRecord(&newFilm);
+        filmData.swapRecord(newFilm);
+        data->watchlist.swapRecord(newFilm);
+        break;
     }
-    loadToTable(data->watchlist.getRecords());
+    refreshTable();
 }
 
 void MainWindow::on_actionZapisz_triggered()
@@ -281,24 +304,51 @@ void MainWindow::on_main_new_clicked()
     int tabIndex = this->ui->mainScreen->currentIndex();
     switch(tabIndex){
     case 0:
+        addNewEntry();
         break;
     case 1:
-        AddFilm form(this);
-        form.exec();
-        Film newFilm = Film(form.getData(filmData.freeId()));
-        if(newFilm.getId()==0){
-            return;
-        }
-        for(QString tag : form.getTags()){
-            newFilm.addTag(tag);
-        }
-        filmData.addFilm(newFilm);
-        data->watchlist.addFilm(newFilm);
-        this->loadToTable(data->watchlist.getRecords());
+        addNewFilm();
         break;
     }
 }
 
+void MainWindow::addNewEntry(){
+    AddEntry form(this);
+    form.exec();
+    Entry newEntry = Entry(form.getData(filmData.freeId(), data->freeId()));
+    if(newEntry.getId()==0){
+        return;
+    }
+    filmData.addFilm(*newEntry.getFilm());
+    data->addEntry(newEntry);
+    refreshTable();
+}
+
+void MainWindow::addNewEntry(Film *film){
+    AddEntry form(film, this);
+    form.exec();
+    Entry *newEntry = new Entry(form.getData(filmData.freeId(), data->freeId()));
+    if(newEntry->getId()==0){
+        return;
+    }
+    data->addEntry(*newEntry);
+    refreshTable();
+}
+
+void MainWindow::addNewFilm(){
+    AddFilm form(this);
+    form.exec();
+    Film *newFilm = new Film(form.getData(filmData.freeId()));
+    if(newFilm->getId()==0){
+        return;
+    }
+    for(QString tag : form.getTags()){
+       newFilm->addTag(tag);
+    }
+    filmData.addFilm(*newFilm);
+    data->watchlist.addFilm(*newFilm);
+    refreshTable();
+}
 
 void MainWindow::on_mainScreen_currentChanged(int index)
 {
@@ -308,11 +358,49 @@ void MainWindow::on_mainScreen_currentChanged(int index)
     else{
         ui->main_open->setVisible(true);
     }
+    refreshTable();
 }
 
 
 void MainWindow::on_main_delete_clicked()
 {
     data->watchlist.deleteRecord(recordSelected);
+    refreshTable();
+}
+
+
+void MainWindow::chooseFromWatchlist()
+{
+    ui->mainScreen->setCurrentIndex(1);
+    refreshTable();
+    ui->main_open->setVisible(true);
+    ui->main_delete->setDisabled(true);
+    ui->main_new->setDisabled(true);
+    ui->main_edit->setDisabled(true);
+    ui->mainScreen->tabBar()->setEnabled(false);
+}
+
+void MainWindow::returnFromChoosingWatchlist()
+{
+    ui->mainScreen->setCurrentIndex(0);
+    refreshTable();
+    ui->main_delete->setEnabled(true);
+    ui->main_new->setEnabled(true);
+    ui->main_edit->setEnabled(true);
+    ui->mainScreen->tabBar()->setEnabled(true);
+}
+
+
+void MainWindow::on_main_open_clicked()
+{
+    if(ui->mainScreen->currentIndex() == 1){
+        Film *film = static_cast<Film*>(recordSelected);
+        addNewEntry(film);
+        returnFromChoosingWatchlist();
+        data->watchlist.deleteRecord(film);
+    }
+    else{
+        //Show Entry
+    }
 }
 

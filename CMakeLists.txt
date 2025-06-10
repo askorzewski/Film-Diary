@@ -31,6 +31,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         record.h record.cpp
         filmdata.h filmdata.cpp
         classmodel.qmodel
+        addentry.h addentry.cpp addentry.ui
 
 
 

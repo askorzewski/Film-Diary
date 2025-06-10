@@ -10,6 +10,10 @@ Entry::Entry(int id, Film* &film, int stars, const QString &text, const QDate &d
     date(date)
 {}
 
+Entry::~Entry(){
+
+}
+
 QString Entry::getLabel(){
     return film->getLabel();
 }
@@ -22,4 +26,8 @@ QString Entry::toText(){
     output.append(text_rating + ",");
     output.append(QString::number(date.year()) + "," + QString::number(date.month()) + "," + QString::number(date.month()));
     return output;
+}
+
+Film* Entry::getFilm() const{
+    return this->film;
 }

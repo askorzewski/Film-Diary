@@ -45,7 +45,7 @@ public:
      * @param path - ścieżka do zawnętrznej bazy
      */
     Database(int id, const QString path);
-    ~Database();
+    virtual ~Database();
 
     virtual void readFile(const QString &fileName) = 0;
 

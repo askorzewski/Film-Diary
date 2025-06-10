@@ -22,7 +22,6 @@ Database::Database(int id) {
     }
     dir.cd("Data/Data"+QString::number(id));
     this->directory=dir;
-
     this->fileList = directory.entryList();
 }
 
@@ -54,12 +53,14 @@ Database::Database(int id, QString path){
 }
 
 Database::~Database(){
-
+    for(QString fileName : this->fileList){
+        QFile(directory.path() + "/" + fileName).close();
+    }
 }
 
 
 
-void Database::addRecord(Record* &record){
+void Database::addRecord(Record *&record){
     if(!usedId.contains(record->getId())){
         usedId.append(record->getId());
     }

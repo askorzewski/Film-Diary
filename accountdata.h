@@ -10,25 +10,23 @@ class AccountData : public Database
 {
     friend class MainWindow;
 
-    QList<Record*> entries;
-
     FilmData* globalFilmData;
 
     QList<Entry> entryList;
 	
     FilmData watchlist = FilmData(this);
-public:
-    
 
+    void readFile(const QString &filename);
+public:
     AccountData(FilmData* global, int id);
 
     QString getName() const;
 
     void addToWatchlist(Film &film);
 
-    void readFile(const QString &fileName);
+    void addEntry(Entry &entry);
 
-    QList<Record*> getRecords(int recordType = 0) const;
+    QList<Record*> getRecords() const;
 
     void saveToFiles();
 };

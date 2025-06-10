@@ -8,19 +8,16 @@ AccountData::AccountData(FilmData* global, int id) : Database(id), globalFilmDat
     file1.close();
     file2.open(QIODevice::NewOnly);
     file2.close();
+    readFile("entries.csv");
 }
 
 QString AccountData::getName() const{
     return name;
 }
 
-
-// QList<Record*> AccountData::getRecords(int recordType) const{
-//     if(recordType == 1){
-//         return watchlist.getRecords();
-//     }
-//     return records;
-// }
+QList<Record*> AccountData::getRecords() const{
+    return this->records;
+}
 
 void AccountData::saveToFiles(){
     writeToFile("entries.csv");
@@ -28,7 +25,7 @@ void AccountData::saveToFiles(){
 }
 
 void AccountData::readFile(const QString &fileName){
-    QFile* entryFile = new QFile(fileName);
+    QFile* entryFile = new QFile(directory.path() + "/" + fileName);
 
     if(!entryFile->open(QIODevice::ReadOnly)) {
         QMessageBox::information(0, "error", entryFile->errorString());
@@ -52,4 +49,10 @@ void AccountData::readFile(const QString &fileName){
         records.append(newEntry);
     }
     entryFile->close();
+}
+
+void AccountData::addEntry(Entry &entry){
+    entryList.append(entry);
+    records.append(&entry);
+    usedId.append(entry.getId());
 }

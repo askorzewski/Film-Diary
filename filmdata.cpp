@@ -43,7 +43,6 @@ void FilmData::readFile(const QString &fileName){
             addFilm(*newFilm);
         }
     }
-    //QTextStream(stdout) << fileName << " loaded." << Qt::endl;
     delete filmFile;
 }
 
@@ -61,11 +60,9 @@ void FilmData::saveToFiles(){
 }
 
 void FilmData::addFilm(Film &film){
-    Film* f = new Film(0);
     Record* rec = &film;
-    rec = f;
-    addRecord(rec);
     filmList.append(film);
+    addRecord(rec);
 }
 
 void FilmData::swapFilm(Film &film){

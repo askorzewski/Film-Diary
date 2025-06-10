@@ -329,6 +329,19 @@
          <property name="sizeConstraint">
           <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
          </property>
+         <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
        </widget>
       </widget>
@@ -407,6 +420,11 @@
        </layout>
       </widget>
      </widget>
+    </widget>
+    <widget class="QWidget" name="entry">
+     <attribute name="title">
+      <string>Wpis</string>
+     </attribute>
     </widget>
    </widget>
    <widget class="QWidget" name="mainUtility" native="true">
@@ -535,7 +553,7 @@
      <x>0</x>
      <y>0</y>
      <width>1366</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOpcje">
@@ -571,6 +589,14 @@
    </property>
    <property name="text">
     <string>Zapisz</string>
+   </property>
+  </action>
+  <action name="actionchooseFromWatchlist">
+   <property name="text">
+    <string>chooseFromWatchlist</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
  </widget>
