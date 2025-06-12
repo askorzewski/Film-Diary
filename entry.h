@@ -19,7 +19,7 @@ class Entry : public Record
 public:
     Entry(int id);
 
-    Entry(int id, Film* &film, int star_rating, const QString &text_rating, const QDate &date);
+    Entry(int id, Film* &film, int star_rating, QString &text_rating, const QDate &date);
 
     ~Entry();
 
@@ -27,13 +27,17 @@ public:
 
     Film* getFilm() const;
 
-    QString toText() const;
+    QString toText();
 
     QString getStars() const;
 
     QString getReview() const;
 
-    QString getDate() const;
+    QString getDateText() const;
+
+    QDate getDate() const;
+
+    QStringList getKeywords() const;
 };
 
 #endif // ENTRY_H

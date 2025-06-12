@@ -14,6 +14,7 @@ class AddEntry : public QDialog
 public:
     explicit AddEntry(QWidget *parent = nullptr);
     explicit AddEntry(Film *film, QWidget *parent = nullptr);
+    explicit AddEntry(Entry *entry, QWidget *parent = nullptr);
     ~AddEntry();
 
     Entry getData(int filmId, int entryId);

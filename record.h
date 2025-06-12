@@ -12,11 +12,13 @@ public:
 
     virtual ~Record();
 
-    QString virtual toText() const = 0;
+    QString virtual toText() = 0;
 
     QString virtual getLabel() const = 0;
 
     int getId() const;
+
+    QStringList virtual getKeywords() const = 0;
 
 protected:
     int id;

@@ -15,7 +15,8 @@ class AddFilm : public QDialog
 {
     Q_OBJECT
 public:
-    explicit AddFilm(QWidget *parent = nullptr, Film *film = nullptr);
+    explicit AddFilm(QWidget *parent);
+    explicit AddFilm(Film* film, QWidget *parent = nullptr);
     ~AddFilm();
     /**
      * @brief getData

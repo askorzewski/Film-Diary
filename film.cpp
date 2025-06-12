@@ -29,7 +29,8 @@ QString Film::getYear() const{
     return this->year;
 }
 
-void Film::addTag(const QString& tag){
+void Film::addTag(QString tag){
+    tag = tag.trimmed();
     if(tags.empty()){
         tags = {tag};
     }
@@ -38,7 +39,7 @@ void Film::addTag(const QString& tag){
     }
 }
 
-QString Film::toText() const{
+QString Film::toText(){
     if(tags.empty()|| tags[0]== " "||tags[0]=="") {
         return QString(QString::number(id) + "," + name + "," + director + "," + year + ",NULL" + "\n");
     }
@@ -53,4 +54,10 @@ QString Film::getLabel() const{
     return QString(name + " (" + year + ")");
 }
 
+QStringList Film::getKeywords() const {
+    QStringList output = QStringList(name.split(" "));
+    output.append(QStringList(director.split(" ")));
+    output.append(tags);
+    return output;
+}
 

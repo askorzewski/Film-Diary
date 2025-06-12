@@ -28,10 +28,30 @@ AddEntry::AddEntry(Film *film, QWidget *parent)
     ui->inYear->setEnabled(false);
     QString tags;
     for(QString tag : film->tags){
+        tag = tag.trimmed();
         tags.append(tag + ",");
     }
     ui->inTags->setText(tags);
     ui->inTags->setEnabled(false);
+}
+
+AddEntry::AddEntry(Entry *entry, QWidget *parent)
+    : QDialog(parent)
+    , ui(new Ui::AddEntry)
+{
+    ui->setupUi(this);
+    Film *editedFilm = entry->getFilm();
+    ui->inName->setText(editedFilm->getName());
+    ui->inDir->setText(editedFilm->getDirector());
+    ui->inYear->setText(editedFilm->getYear());
+    QString tagList;
+    for(QString tag : editedFilm->tags){
+        tagList.push_back(tag + ",");
+    }
+    ui->inTags->setText(tagList);
+    ui->inStars->setValue(entry->getStars().toInt());
+    ui->inReview->setPlainText(entry->getReview());
+    ui->inDate->setDate(entry->getDate());
 }
 
 AddEntry::~AddEntry()
@@ -61,6 +81,9 @@ Entry AddEntry::getData(int filmId, int entryId){
     }
     if(film == nullptr){
         this->film = new Film(filmId, name, director, year);
+        for(QString tag : tags){
+            film->addTag(tag);
+        }
     }
     Entry output = Entry(entryId, film, stars, review, date);
     return output;

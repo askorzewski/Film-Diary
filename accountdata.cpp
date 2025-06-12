@@ -40,6 +40,7 @@ void AccountData::readFile(const QString &fileName){
         Film* film = static_cast<Film*>(globalFilmData->findRecord(fields.at(1).toInt()));
         int stars = fields.at(2).toInt();
         QString review = fields.at(3);
+        review.replace("%0A","\n");
         QDate date = QDate(fields.at(4).toInt(), fields.at(5).toInt(), fields.at(6).toInt());
         if(!usedId.contains(entryId)){
             newEntry = new Entry(entryId, film, stars, review, date);
@@ -53,7 +54,6 @@ void AccountData::readFile(const QString &fileName){
 
 void AccountData::addEntry(Entry &entry){
     Record* entry_ptr = &entry;
-    records.append(entry_ptr);
+    addRecord(entry_ptr);
     entryList.append(entry);
-    usedId.append(entry.getId());
 }

@@ -212,19 +212,20 @@ void MainWindow::on_actionWyloguj_triggered()
  * Main Screen
 */
 
-void MainWindow::refreshTable()
+void MainWindow::refreshTable(QList<Record*> records)
 {
     int tabIndex = ui->mainScreen->currentIndex();
-    QList<Record*> records;
-    switch(tabIndex){
-    case 0:
-        records = data->getRecords();
-        break;
-    case 1:
-        records = data->watchlist.getRecords();
-        break;
-    case 2:
-        return;
+    if(!records.isEmpty() and records[0]==nullptr){
+        switch(tabIndex){
+        case 0:
+            records = data->getRecords();
+            break;
+        case 1:
+            records = data->watchlist.getRecords();
+            break;
+        case 2:
+            return;
+        }
     }
     QList<QPushButton*> existingButtons = ui->mainScreen->findChildren<QPushButton*>(QRegularExpression("^[0-9]+$"));
     for(QPushButton* button : existingButtons){
@@ -234,9 +235,11 @@ void MainWindow::refreshTable()
         button->close();
         recordSelected = nullptr;
     }
-
+    if(records.isEmpty()){
+        return;
+    }
     QString tableName;
-    switch(ui->mainScreen->currentIndex()){
+    switch(tabIndex){
     case 0:
         tableName = "EntriesTable";
         break;
@@ -285,10 +288,18 @@ void MainWindow::on_main_edit_clicked(){
         return;
     }
     int tabIndex = this->ui->mainScreen->currentIndex();
-    switch(tabIndex){
-    case 1:
+    if(tabIndex == 0){
+        int entryId = recordSelected->getId();
+        int filmId = static_cast<Entry*>(recordSelected)->getFilm()->getId();
+        AddEntry form(static_cast<Entry*>(recordSelected), this);
+        form.exec();
+        Entry *newEntry = new Entry(form.getData(filmId, entryId));
+        filmData.swapRecord(newEntry->getFilm());
+        data->swapRecord(newEntry);
+    }
+    else if(tabIndex == 1){
         int recordId = this->recordSelected->getId();
-        AddFilm form(this, static_cast<Film*>(recordSelected));
+        AddFilm form(static_cast<Film*>(recordSelected), this);
         form.exec();
         Film *newFilm = new Film(form.getData(recordId));
         for(QString tag : form.getTags()){
@@ -299,7 +310,6 @@ void MainWindow::on_main_edit_clicked(){
         }
         filmData.swapRecord(newFilm);
         data->watchlist.swapRecord(newFilm);
-        break;
     }
     refreshTable();
 }
@@ -355,7 +365,8 @@ void MainWindow::addNewFilm(){
         return;
     }
     for(QString tag : form.getTags()){
-       newFilm->addTag(tag);
+        tag = tag.trimmed();
+        newFilm->addTag(tag);
     }
     filmData.addFilm(*newFilm);
     data->watchlist.addFilm(*newFilm);
@@ -421,6 +432,9 @@ void MainWindow::returnFromChoosingWatchlist()
 
 void MainWindow::on_main_open_clicked()
 {
+    if(recordSelected == nullptr){
+        return;
+    }
     if(ui->mainScreen->currentIndex() == 1){
         Film *film = static_cast<Film*>(recordSelected);
         addNewEntry(film);
@@ -439,6 +453,7 @@ void MainWindow::on_main_open_clicked()
 }
 
 void MainWindow::showEntry(Entry *entry_ptr){
+    qDeleteAll(ui->tagSpace->findChildren<QWidget*>());
     if(entry_ptr == nullptr){
         return;
     }
@@ -448,7 +463,7 @@ void MainWindow::showEntry(Entry *entry_ptr){
     ui->labelDirector->setText(film.getDirector());
     ui->labelYear->setText(film.getYear());
     ui->reviewSpace->setText(entry.getReview());
-    ui->labelDate->setText(entry.getDate());
+    ui->labelDate->setText(entry.getDateText());
     ui->starImage->setPixmap(QPixmap("Images/" + entry.getStars() + ".png"));
     for(QString tag : film.tags){
         QLabel* label = new QLabel(tag);
@@ -456,3 +471,34 @@ void MainWindow::showEntry(Entry *entry_ptr){
     }
     ui->tagSpace->setFixedSize(ui->tagSpace->sizeHint().width(), ui->tagSpace->sizeHint().height());
 }
+
+void MainWindow::on_searchButton_clicked()
+{
+    QString searchQuery = ui->searchInput->text().toLower();
+    if(searchQuery.isEmpty()){
+        return;
+    }
+    QList<Record*> inputRecords;
+    QList<Record*> outputRecords = {};
+    switch(ui->mainScreen->currentIndex()){
+    case 0:
+        inputRecords = data->getRecords();
+        break;
+    case 1:
+        inputRecords = data->watchlist.getRecords();
+        break;
+    case 2:
+        return;
+    }
+    for(Record* record : inputRecords){
+        QStringList keywords = record->getKeywords();
+        for(QString key : keywords){
+            key = key.toLower();
+            if(key == searchQuery){
+                outputRecords.append(record);
+            }
+        }
+    }
+    refreshTable(outputRecords);
+}
+

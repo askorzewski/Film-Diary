@@ -483,7 +483,7 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>70</y>
+          <y>60</y>
           <width>1341</width>
           <height>20</height>
          </rect>
@@ -498,7 +498,7 @@
           <x>20</x>
           <y>90</y>
           <width>352</width>
-          <height>131</height>
+          <height>139</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="stars">
@@ -560,7 +560,7 @@
         <property name="geometry">
          <rect>
           <x>1020</x>
-          <y>250</y>
+          <y>260</y>
           <width>301</width>
           <height>51</height>
          </rect>
@@ -575,13 +575,6 @@
          <property name="rightMargin">
           <number>1</number>
          </property>
-         <item alignment="Qt::AlignmentFlag::AlignLeft">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Tagi:</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </widget>
        <widget class="QWidget" name="horizontalLayoutWidget_3">
@@ -636,9 +629,9 @@
        <widget class="QWidget" name="horizontalLayoutWidget_4">
         <property name="geometry">
          <rect>
-          <x>830</x>
+          <x>860</x>
           <y>80</y>
-          <width>501</width>
+          <width>431</width>
           <height>80</height>
          </rect>
         </property>
@@ -658,6 +651,19 @@
           </widget>
          </item>
         </layout>
+       </widget>
+       <widget class="QLabel" name="label_4">
+        <property name="geometry">
+         <rect>
+          <x>1020</x>
+          <y>208</y>
+          <width>81</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Tagi:</string>
+        </property>
        </widget>
       </widget>
      </widget>

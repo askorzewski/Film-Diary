@@ -2,14 +2,18 @@
 #include "ui_addfilm.h"
 #include "mainwindow.h"
 
-AddFilm::AddFilm(QWidget *parent, Film* film)
+AddFilm::AddFilm(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::AddFilm)
 {
     ui->setupUi(this);
-    if(film == nullptr){
-        return;
-    }
+}
+
+AddFilm::AddFilm(Film* film, QWidget *parent)
+    : QDialog(parent)
+    , ui(new Ui::AddFilm)
+{
+    ui->setupUi(this);
     ui->inName->setText(film->getName());
     ui->inDir->setText(film->getDirector());
     ui->inYear->setText(film->getYear());

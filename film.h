@@ -23,17 +23,18 @@ public:
     QString getDirector() const;
     QString getYear() const;
 
-    void addTag(const QString &tag);
+    void addTag(QString tag);
 
     QStringList tags;
     /**
      * @brief toText
      * @return Dane obiektu w formie tekstowej do zapisu w pliku
      */
-    QString toText() const;
+    QString toText();
 
     QString getLabel() const;
 
+    QStringList getKeywords() const;
 private:
 
 };
