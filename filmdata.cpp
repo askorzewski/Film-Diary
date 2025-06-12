@@ -5,13 +5,20 @@ FilmData::FilmData() {
     readFile(directory.path() + "/films.csv");
 }
 
-//POTEM: Ten konstruktor może byc bardziej ogolny
+/**
+ * @brief FilmData::FilmData Konstruktor wykorzystywany wyłącznie do tworzenia watchlist
+ * @param account Wskaźnik na dane konta do którego należy watchlista
+ */
 FilmData::FilmData(Database* account){
     this->id = account->getId();
     directory = account->getDir();
     readFile(account->getDir() + "/watchlist.csv");
 }
 
+/**
+ * @brief FilmData::readFile Metoda odziedziczona z klasy Database. Czyta pliki przygotowane do formatu przechowującego dane o filmach ("films.csv", "watchlist.csv").
+ * @param fileName Nazwa pliku
+ */
 void FilmData::readFile(const QString &fileName){
     QFile* filmFile = new QFile(fileName);
     if(!filmFile->exists()){
@@ -46,6 +53,11 @@ void FilmData::readFile(const QString &fileName){
     delete filmFile;
 }
 
+
+/**
+ * @brief FilmData::getFilms Metoda, która zwraca liste filmóW
+ * @return
+ */
 QList<Film> FilmData::getFilms() const{
     return this->filmList;
 }

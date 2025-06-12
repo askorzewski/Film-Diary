@@ -23,11 +23,17 @@ public:
 
     ~Entry();
 
-    QString getLabel();
+    QString getLabel() const;
 
     Film* getFilm() const;
 
-    QString toText();
+    QString toText() const;
+
+    QString getStars() const;
+
+    QString getReview() const;
+
+    QString getDate() const;
 };
 
 #endif // ENTRY_H

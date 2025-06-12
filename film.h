@@ -30,9 +30,9 @@ public:
      * @brief toText
      * @return Dane obiektu w formie tekstowej do zapisu w pliku
      */
-    QString toText();
+    QString toText() const;
 
-    QString getLabel();
+    QString getLabel() const;
 
 private:
 

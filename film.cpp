@@ -38,7 +38,7 @@ void Film::addTag(const QString& tag){
     }
 }
 
-QString Film::toText(){
+QString Film::toText() const{
     if(tags.empty()|| tags[0]== " "||tags[0]=="") {
         return QString(QString::number(id) + "," + name + "," + director + "," + year + ",NULL" + "\n");
     }
@@ -49,7 +49,7 @@ QString Film::toText(){
     return output;
 }
 
-QString Film::getLabel(){
+QString Film::getLabel() const{
     return QString(name + " (" + year + ")");
 }
 

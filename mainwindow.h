@@ -66,6 +66,8 @@ private slots:
 
     void on_main_open_clicked();
 
+    void showEntry(Entry *entry_ptr);
+
 private:
     FilmData filmData = FilmData();
 

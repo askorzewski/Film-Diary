@@ -1,4 +1,3 @@
-//#include <iostream>
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include <QFileDialog>
@@ -19,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     loadAccountData();
+    ui->mainScreen->tabBar()->setTabVisible(2, false);
     reloadStartUi();
 }
 
@@ -189,9 +189,11 @@ void MainWindow::on_buttonLoad_clicked()
             data = &account;
         }
     }
-    ui->startScreen->setFixedSize(0,0);
+    ui->startScreen->setFixedSize(0,0); //Tu wszędzie powinno byc setVisible() jakbym wczesniej wiedzial ze mozna
     ui->mainScreen->setFixedSize(1366,718);
     ui->mainUtility->setFixedSize(1310, 100);
+    ui->mainScreen->setCurrentIndex(0);
+    ui->searchBar->setVisible(true);
     this->refreshTable();
 }
 
@@ -201,6 +203,7 @@ void MainWindow::on_actionWyloguj_triggered()
     ui->startScreen->setFixedSize(1366,718);
     ui->mainScreen->setFixedSize(0,0);
     ui->mainUtility->setFixedSize(0,0);
+    ui->searchBar->setVisible(false);
 }
 
 
@@ -223,7 +226,7 @@ void MainWindow::refreshTable()
     case 2:
         return;
     }
-    QList<QPushButton*> existingButtons = ui->mainScreen->currentWidget()->findChildren<QPushButton*>(QRegularExpression("^[0-9]+$"));
+    QList<QPushButton*> existingButtons = ui->mainScreen->findChildren<QPushButton*>(QRegularExpression("^[0-9]+$"));
     for(QPushButton* button : existingButtons){
         button->disconnect();
         button->setVisible(false);
@@ -264,7 +267,16 @@ void MainWindow::selectRecord(){
         toggledbutton->toggle();
     }
     QObject* sender = QObject::sender();
-    recordSelected = data->watchlist.findRecord(sender->objectName().toInt());
+    int recordId = sender->objectName().toInt();
+    switch(ui->mainScreen->currentIndex()) {
+    case 0:
+        recordSelected = data->findRecord(recordId);
+        break;
+    case 1:
+        recordSelected = data->watchlist.findRecord(recordId);
+    default:
+        return;
+    }
 }
 
 
@@ -315,12 +327,12 @@ void MainWindow::on_main_new_clicked()
 void MainWindow::addNewEntry(){
     AddEntry form(this);
     form.exec();
-    Entry newEntry = Entry(form.getData(filmData.freeId(), data->freeId()));
-    if(newEntry.getId()==0){
+    Entry *newEntry = new Entry(form.getData(filmData.freeId(), data->freeId()));
+    if(newEntry->getId()==0){
         return;
     }
-    filmData.addFilm(*newEntry.getFilm());
-    data->addEntry(newEntry);
+    filmData.addFilm(*newEntry->getFilm());
+    data->addEntry(*newEntry);
     refreshTable();
 }
 
@@ -352,19 +364,35 @@ void MainWindow::addNewFilm(){
 
 void MainWindow::on_mainScreen_currentChanged(int index)
 {
-    if(index!=0){
-        ui->main_open->setVisible(false);
-    }
-    else{
+    switch(index){
+    case 0:
+        ui->mainUtility->setVisible(true);
         ui->main_open->setVisible(true);
+        break;
+    case 1:
+        ui->mainUtility->setVisible(true);
+        ui->main_open->setVisible(false);
+        break;
+    case 2:
+        ui->mainUtility->setVisible(false);
     }
+    recordSelected = nullptr;
     refreshTable();
 }
 
 
 void MainWindow::on_main_delete_clicked()
 {
-    data->watchlist.deleteRecord(recordSelected);
+    QList<Record*>recordList;
+    switch(ui->mainScreen->currentIndex()){
+    case 0:
+        data->deleteRecord(recordSelected);
+        break;
+    case 1:
+        data->watchlist.deleteRecord(recordSelected);
+        break;
+    }
+
     refreshTable();
 }
 
@@ -399,8 +427,32 @@ void MainWindow::on_main_open_clicked()
         returnFromChoosingWatchlist();
         data->watchlist.deleteRecord(film);
     }
-    else{
-        //Show Entry
+    else if(ui->mainScreen->currentIndex()==0){
+        if(ui->mainScreen->tabBar()->isTabVisible(2) == false){
+            QTabBar *bar =ui->mainScreen->tabBar();
+            bar->setTabVisible(2, true);
+            bar->resize(bar->sizeHint().width(), bar->sizeHint().height());
+        }
+        showEntry(static_cast<Entry*>(recordSelected));
+        ui->mainScreen->setCurrentIndex(2);
     }
 }
 
+void MainWindow::showEntry(Entry *entry_ptr){
+    if(entry_ptr == nullptr){
+        return;
+    }
+    const Entry entry = *entry_ptr;
+    const Film film = *entry.getFilm();
+    ui->title->setText(film.getLabel());
+    ui->labelDirector->setText(film.getDirector());
+    ui->labelYear->setText(film.getYear());
+    ui->reviewSpace->setText(entry.getReview());
+    ui->labelDate->setText(entry.getDate());
+    ui->starImage->setPixmap(QPixmap("Images/" + entry.getStars() + ".png"));
+    for(QString tag : film.tags){
+        QLabel* label = new QLabel(tag);
+        ui->tagsSpace->addWidget(label);
+    }
+    ui->tagSpace->setFixedSize(ui->tagSpace->sizeHint().width(), ui->tagSpace->sizeHint().height());
+}

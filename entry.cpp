@@ -14,11 +14,11 @@ Entry::~Entry(){
 
 }
 
-QString Entry::getLabel(){
+QString Entry::getLabel() const{
     return film->getLabel();
 }
 
-QString Entry::toText(){
+QString Entry::toText() const{
     QString output;
     output.append(QString::number(id) +",");
     output.append(QString::number(film->getId()) + ",");
@@ -30,4 +30,18 @@ QString Entry::toText(){
 
 Film* Entry::getFilm() const{
     return this->film;
+}
+
+QString Entry::getStars() const{
+    return QString::number(star_rating);
+}
+
+QString Entry::getReview() const{
+    return this->text_rating;
+}
+
+
+QString Entry::getDate() const{
+    QString output(QString::number(date.day()) + "." + QString::number(date.month()) + "." + QString::number(date.year()));
+    return output;
 }

@@ -12,9 +12,9 @@ public:
 
     virtual ~Record();
 
-    QString virtual toText() = 0;
+    QString virtual toText() const = 0;
 
-    QString virtual getLabel() = 0;
+    QString virtual getLabel() const = 0;
 
     int getId() const;
 

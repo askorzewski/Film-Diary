@@ -52,7 +52,8 @@ void AccountData::readFile(const QString &fileName){
 }
 
 void AccountData::addEntry(Entry &entry){
+    Record* entry_ptr = &entry;
+    records.append(entry_ptr);
     entryList.append(entry);
-    records.append(&entry);
     usedId.append(entry.getId());
 }

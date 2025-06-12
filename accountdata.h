@@ -9,11 +9,17 @@
 class AccountData : public Database
 {
     friend class MainWindow;
-
+    /**
+     * @brief globalFilmData - wskaźnik na globalną baze filmów (pole klasy MainWindow), używana przez wpisy do znaleźienia filmów po ID.
+     */
     FilmData* globalFilmData;
 
+    /**
+     * @brief entryList - miejsce gdzie przechowywane są obiekty wpisów
+     */
     QList<Entry> entryList;
-	
+
+
     FilmData watchlist = FilmData(this);
 
     void readFile(const QString &filename);
