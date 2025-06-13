@@ -1,4 +1,4 @@
-Film Diary
+# Film Diary
 ---
 ## Dziennik do zapisywania obejrzanych filmów
 
