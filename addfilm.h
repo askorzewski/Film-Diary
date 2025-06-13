@@ -19,9 +19,9 @@ public:
     explicit AddFilm(Film* film, QWidget *parent = nullptr);
     ~AddFilm();
     /**
-     * @brief getData
-     * @param id - nadane ID
-     * @return Objekt Film na podstawie wprowadzonych w formularzu danych.
+     * @brief getData Funcja służąca do przekazania danych z formularza jako gotowy obiekt klasy Entry.
+     * @param id Id filmu.
+     * @return Objekt Film powstały na podstawie wprowadzonych w formularzu danych.
      */
     Film getData(int id) const;
 

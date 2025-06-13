@@ -14,7 +14,14 @@ private:
 
     void readFile(const QString &fileName);
 public:
+    /**
+     * @brief FilmData Konstruktor tworzący globalną baze filmów o id 0
+     */
     FilmData(); //Global filmdata
+    /**
+     * @brief FilmData Konstruktor tworzący bazę filmów (watchlistę) podpiętą pod dane konto
+     * @param account Konto dla którego tworzona jest watchlista
+     */
     FilmData(Database* account); //Account-specific filmdata
 
     QList<Film> getFilms() const;

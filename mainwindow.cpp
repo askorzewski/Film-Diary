@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     loadAccountData();
     ui->mainScreen->tabBar()->setTabVisible(2, false);
+    ui->searchBar->setVisible(false);
     reloadStartUi();
 }
 
@@ -163,7 +164,6 @@ void MainWindow::on_buttonBox_accepted()
 
     QFile accountFile = QFile("Data/accounts.csv");
     if(!accountFile.open(QIODevice::Append)){
-        QMessageBox::information(0, "error", accountFile.fileName() + ": " + accountFile.errorString());
     }
     QTextStream accountStream(&accountFile);
 
@@ -476,6 +476,7 @@ void MainWindow::on_searchButton_clicked()
 {
     QString searchQuery = ui->searchInput->text().toLower();
     if(searchQuery.isEmpty()){
+        refreshTable();
         return;
     }
     QList<Record*> inputRecords;

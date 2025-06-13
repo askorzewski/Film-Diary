@@ -15,10 +15,6 @@ QString AccountData::getName() const{
     return name;
 }
 
-QList<Record*> AccountData::getRecords() const{
-    return this->records;
-}
-
 void AccountData::saveToFiles(){
     writeToFile("entries.csv");
     watchlist.saveToFiles();

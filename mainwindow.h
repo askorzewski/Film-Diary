@@ -71,6 +71,9 @@ private slots:
     void on_searchButton_clicked();
 
 private:
+    /**
+     * @brief filmData Globalna Baza Filmów (wspódzielona przez wszystkie konta)
+     */
     FilmData filmData = FilmData();
 
     Ui::MainWindow *ui;
@@ -83,6 +86,9 @@ private:
 
     Record* recordSelected = nullptr;
 
+    /**
+     * @brief data Dane aktualnie otwartego konta
+     */
     AccountData* data;
 };
 #endif // MAINWINDOW_H
